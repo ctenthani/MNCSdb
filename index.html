@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MNCS Players & Associations Database</title>
+  <meta name="description" content="Malawi National Council of Sports - Players, Associations, Events & Results Registry" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-800 via-green-700 to-red-700 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-lg">MN</div>
+          <div>
+            <h1 class="text-lg font-bold leading-tight">MNCS Registry</h1>
+            <p class="text-xs text-green-100 hidden sm:block">Players • Associations • Events • Results</p>
+          </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-1">
+          <button data-view="dashboard" class="nav-btn active px-3 py-2 rounded-md text-sm font-medium">Dashboard</button>
+          <button data-view="associations" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Associations</button>
+          <button data-view="players" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Players</button>
+          <button data-view="events" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Events</button>
+          <button data-view="results" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Results</button>
+        </nav>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-white/10">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile nav -->
+    <div id="mobile-nav" class="hidden md:hidden bg-green-900/95 px-4 pb-3">
+      <button data-view="dashboard" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Dashboard</button>
+      <button data-view="associations" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Associations</button>
+      <button data-view="players" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Players</button>
+      <button data-view="events" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Events</button>
+      <button data-view="results" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Results</button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Search bar (shared) -->
+    <div class="mb-6">
+      <div class="relative">
+        <input id="global-search" type="search" placeholder="Search players, associations, events..." 
+               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-sm" />
+        <svg class="absolute left-3 top-3 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+    </div>
+
+    <!-- Views -->
+    <div id="view-dashboard" class="view">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Associations</p>
+          <p id="stat-associations" class="text-3xl font-bold text-green-800 mt-1">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Registered Players</p>
+          <p id="stat-players" class="text-3xl font-bold text-green-800 mt-1">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Events</p>
+          <p id="stat-events" class="text-3xl font-bold text-green-800 mt-1">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Results Recorded</p>
+          <p id="stat-results" class="text-3xl font-bold text-green-800 mt-1">—</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <h2 class="font-semibold text-lg mb-4">Recent / Featured Players</h2>
+          <div id="featured-players" class="space-y-3"></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+          <h2 class="font-semibold text-lg mb-4">Upcoming & Ongoing Events</h2>
+          <div id="upcoming-events" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-white rounded-xl shadow-sm border border-slate-100 p-5">
+        <h2 class="font-semibold text-lg mb-3">About this Registry</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          First draft of the Malawi National Council of Sports (MNCS) central players and associations database. 
+          It captures affiliated national sports associations, registered athletes, events and competition results. 
+          Sample data is included for demonstration. Built for deployment on Netlify as a static site.
+        </p>
+      </div>
+    </div>
+
+    <div id="view-associations" class="view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-xl font-bold">Sports Associations</h2>
+        <select id="assoc-status-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
+          <option value="">All statuses</option>
+          <option value="Active">Active</option>
+          <option value="Suspended">Suspended</option>
+          <option value="Under Review">Under Review</option>
+        </select>
+      </div>
+      <div id="associations-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+    <div id="view-players" class="view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-xl font-bold">Players Registry</h2>
+        <div class="flex flex-wrap gap-2">
+          <select id="player-assoc-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
+            <option value="">All associations</option>
+          </select>
+          <select id="player-gender-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
+            <option value="">All genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <select id="player-national-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
+            <option value="">All players</option>
+            <option value="true">National Team only</option>
+          </select>
+        </div>
+      </div>
+      <div id="players-list" class="overflow-x-auto bg-white rounded-xl shadow-sm border border-slate-100"></div>
+    </div>
+
+    <div id="view-events" class="view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-xl font-bold">Events & Competitions</h2>
+        <select id="event-status-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
+          <option value="">All statuses</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+      <div id="events-list" class="space-y-3"></div>
+    </div>
+
+    <div id="view-results" class="view hidden">
+      <h2 class="text-xl font-bold mb-4">Competition Results</h2>
+      <div id="results-list" class="overflow-x-auto bg-white rounded-xl shadow-sm border border-slate-100"></div>
+    </div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between p-4 border-b">
+        <h3 id="modal-title" class="font-semibold text-lg"></h3>
+        <button id="modal-close" class="p-1 rounded-full hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="modal-body" class="p-4 text-sm space-y-2"></div>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
+    <p>Malawi National Council of Sports (MNCS) — Players Database Draft v0.1</p>
+    <p class="mt-1">Sample data for demonstration • Deployable on Netlify</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
