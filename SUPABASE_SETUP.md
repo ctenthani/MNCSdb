@@ -64,3 +64,9 @@ Four tables and the private document bucket are protected by row-level policies.
 Live access-control testing remains required; local tests cannot verify a hosted
 Supabase project's configuration. Provisioning accounts and initial registry records
 still requires an administrator in Supabase; on-site account creation is deferred.
+
+
+## v0.4: accounts created on the site
+
+Follow `ACCOUNT_SETUP.md` for the extra migration and Netlify server settings.
+Manual Authentication user creation is no longer required for routine use.

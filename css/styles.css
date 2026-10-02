@@ -78,3 +78,9 @@ tr:hover td {
 .submission-card {border:1px solid #dce5df;border-radius:12px;padding:16px;margin:16px 0;}
 .submission-card pre {white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;margin:12px 0;}
 #portal-notice {padding:12px;color:#14532d;}
+#award-workspace form {display:grid;gap:16px;margin-top:16px;}
+#award-workspace label {display:block;}
+#award-workspace input:not([type=checkbox]),#award-workspace textarea,#award-workspace select {display:block;width:100%;border:1px solid #b5c5ba;padding:10px;border-radius:8px;}
+#award-workspace button {background:#166534;color:white;padding:12px;border-radius:8px;}
+#award-workspace button:disabled {opacity:.5;}
+#award-notice {padding-top:12px;}

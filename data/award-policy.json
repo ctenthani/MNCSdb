@@ -1,0 +1,11 @@
+{
+  "juniorAgeLimitExclusive": 20,
+  "juniorAgeReferenceDate": null,
+  "proposedOfficialScoring": "judges_only",
+  "publicPollPurpose": "Fan engagement only; does not affect the proposed judges-only awards",
+  "amendmentApproved": false,
+  "policyDisclosed": false,
+  "officialRankingEnabled": false,
+  "handbookBaseline": "70% adjudication and 30% public voting",
+  "status": "Proposal pending MNCS approval and public disclosure"
+}

@@ -137,3 +137,27 @@ MNCS reviewers can configure reporting requirements with deadlines, then export 
 management CSV showing Missing, Draft, Submitted, Returned and Approved records.
 See `SUPABASE_SETUP.md` for the full setup, including the additional migration.
 The supplied project URL and public publishable key are configured. Run the database migrations and provision accounts before live use.
+
+## v0.4: on-site accounts
+
+Initial MNCS administrator setup, MNCS/association account creation, association
+registration and password changes now happen in Workspace. See `ACCOUNT_SETUP.md`
+for the one-time migration and server configuration. Deploy through Git so the
+Netlify function is built. This feature is implemented but requires live setup
+and permission testing before use.
+
+Run all checks: `node --test tests/*.cjs tests/*.mjs`.
+
+## v0.5: Malawi Sport Awards
+
+Adds the 14 handbook categories and association nomination dossiers. Read
+`AWARDS_IMPLEMENTATION.md`, then run `supabase/v0.5-migration.sql` once after v0.4.
+Official judging, voting and rankings are not yet enabled; the isolated scoring
+helper requires explicitly approved normalization and certified vote inputs.
+
+## Latest v0.6 installation
+
+Start with `START_HERE.md` and run only `supabase/INSTALL_ALL.sql`. It includes all
+implemented database versions. Junior candidates must be under 20 on an explicit
+cycle reference date. Judges-only awards are an openly disclosed proposed policy
+amendment, not a hidden removal of the handbook public-vote component.

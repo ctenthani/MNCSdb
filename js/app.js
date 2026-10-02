@@ -107,7 +107,9 @@ function render() {
 function renderCurrentView() {
   const q = state.searchQuery.toLowerCase().trim();
 
-  if (state.currentView === 'dashboard') {
+  if (state.currentView === 'awards') {
+    window.renderAwards?.();
+  } else if (state.currentView === 'dashboard') {
     renderDashboard(q);
   } else if (state.currentView === 'associations') {
     renderAssociations(q);

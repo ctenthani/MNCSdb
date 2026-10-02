@@ -1,0 +1,161 @@
+[
+  {
+    "id": "junior-male",
+    "name": "Junior Male Sportsperson of the Year",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Age eligibility and age-based competitions",
+      "Exceptional performance",
+      "World-class potential",
+      "Conduct, ethics and anti-doping compliance"
+    ]
+  },
+  {
+    "id": "junior-female",
+    "name": "Junior Female Sportsperson of the Year",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Age eligibility and age-based competitions",
+      "Exceptional performance",
+      "World-class potential",
+      "Conduct, ethics and anti-doping compliance"
+    ]
+  },
+  {
+    "id": "national-team",
+    "name": "National Team of the Year",
+    "nomineeType": "team",
+    "criteriaSummary": [
+      "Competition success",
+      "Teamwork and excellence",
+      "Achievement against adversity",
+      "Consistency",
+      "Representation of Malawi"
+    ]
+  },
+  {
+    "id": "association",
+    "name": "Sports Association of the Year",
+    "nomineeType": "association",
+    "criteriaSummary": [
+      "MNCS affiliation and good standing",
+      "Governance and compliance",
+      "Participation and development",
+      "At least one national championship",
+      "Regional, continental and international results"
+    ]
+  },
+  {
+    "id": "development-programme",
+    "name": "Best Executed Sport Development Program of the Year",
+    "nomineeType": "programme",
+    "criteriaSummary": [
+      "Grassroots talent identification and development",
+      "Sustainability and growth",
+      "Gender equality, inclusion and access"
+    ]
+  },
+  {
+    "id": "sportsman",
+    "name": "Sports Man of the Year",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Sporting excellence",
+      "Leadership and discipline",
+      "Sport development or promotion",
+      "Performance benchmarks"
+    ]
+  },
+  {
+    "id": "sportswoman",
+    "name": "Sports Woman of the Year",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Sporting excellence",
+      "Leadership and discipline",
+      "Sport development or promotion",
+      "Performance benchmarks"
+    ]
+  },
+  {
+    "id": "disability-male",
+    "name": "Sports Man of the Year with Disability",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Achievement in disability sport",
+      "Resilience and inspiration",
+      "Advocacy or development of disability sport"
+    ]
+  },
+  {
+    "id": "disability-female",
+    "name": "Sports Woman of the Year with Disability",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Achievement in disability sport",
+      "Resilience and inspiration",
+      "Advocacy or development of disability sport"
+    ]
+  },
+  {
+    "id": "coach",
+    "name": "Coach of the Year",
+    "nomineeType": "person",
+    "criteriaSummary": [
+      "Athlete or team success",
+      "Mentoring and teamwork",
+      "Training innovation",
+      "Consistent positive results"
+    ]
+  },
+  {
+    "id": "administrator",
+    "name": "Sports Administrator of the Year",
+    "nomineeType": "person",
+    "criteriaSummary": [
+      "Leadership and organisation",
+      "Measurable sporting impact",
+      "Development initiatives"
+    ]
+  },
+  {
+    "id": "journalist-print",
+    "name": "Sports Journalist of the Year – Print",
+    "nomineeType": "person",
+    "criteriaSummary": [
+      "Quality and consistent coverage",
+      "Grassroots and lesser-known sports",
+      "Innovation and analysis",
+      "Developmental and elite sport coverage",
+      "Emerging athlete profiles",
+      "Inspiration",
+      "Coverage of at least three MNCS programmes or activities"
+    ]
+  },
+  {
+    "id": "journalist-electronic",
+    "name": "Sports Journalist of the Year – Electronic",
+    "nomineeType": "person",
+    "criteriaSummary": [
+      "Quality and consistent coverage",
+      "Grassroots and lesser-known sports",
+      "Innovation and analysis",
+      "Developmental and elite sport coverage",
+      "Emerging athlete profiles",
+      "Inspiration",
+      "Coverage of at least three MNCS programmes or activities"
+    ]
+  },
+  {
+    "id": "personality",
+    "name": "Sports Personality of the Year",
+    "nomineeType": "athlete",
+    "criteriaSummary": [
+      "Winner of an individual athlete category",
+      "Community contribution",
+      "Leadership",
+      "World-class continental/global performance or world records",
+      "Public appeal and prominence"
+    ]
+  }
+]

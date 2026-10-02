@@ -29,7 +29,7 @@
           <button data-view="players" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Players</button>
           <button data-view="events" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Events</button>
           <button data-view="results" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Results</button>
-        <button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button></nav>
+        <button data-view="awards" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Awards</button><button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button></nav>
         <button id="mobile-menu-btn" aria-label="Open navigation" class="md:hidden p-2 rounded-md hover:bg-white/10">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
@@ -41,7 +41,7 @@
       <button data-view="associations" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Associations</button>
       <button data-view="players" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Players</button>
       <button data-view="events" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Events</button>
-      <button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
+      <button data-view="awards" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Awards</button><button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
       <button data-view="results" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Results</button>
     </div>
 <div id="data-banner" class="px-4 py-2 bg-amber-100 text-amber-900 text-sm">Demonstration data · unverified names, dates and results</div></header>
@@ -57,6 +57,7 @@
     </div>
 
 <section id="view-portal" class="view hidden"><h2 class="text-xl font-bold mb-4">Association submissions and MNCS review</h2><p id="portal-notice" role="status" aria-live="polite"></p><div id="portal-content"></div></section>
+<section id="view-awards" class="view hidden"><h2 class="text-xl font-bold mb-4">Malawi Sport Awards</h2><div id="awards-content"></div></section>
     <!-- Views -->
     <div id="view-dashboard" class="view">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -166,7 +167,7 @@
   </div>
 
   <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-    <p>Malawi National Council of Sports (MNCS) — Association Management v0.3</p>
+    <p>Malawi National Council of Sports (MNCS) — Association Management v0.6</p>
     <p class="mt-1">Sample data for demonstration • Deployable on Netlify</p>
   </footer>
 
@@ -174,6 +175,9 @@
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
   <script src="js/reporting.js"></script>
+  <script src="js/accounts.js"></script>
+  <script src="js/award-scoring.js"></script>
+  <script src="js/awards.js"></script>
   <script src="js/portal.js"></script>
 </body>
 </html>
