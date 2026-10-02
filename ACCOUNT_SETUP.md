@@ -1,3 +1,7 @@
+> Historical setup guide. For V1.0, follow **START_HERE.md** and run only
+> **supabase/INSTALL_ALL.sql**. Fan polls require Email signups enabled and
+> verified email; staff roles remain provisioned by MNCS on the site.
+
 # MNCS v0.4: create all accounts on the site
 
 Routine account creation now happens in Workspace. Supabase continues to store

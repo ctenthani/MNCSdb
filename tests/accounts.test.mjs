@@ -49,3 +49,7 @@ test('admin reset rejects 1234 before calling Auth admin API',async()=>{
 test('read-only service status reports missing variable names without exposing secret values',async()=>{
  await withMock(()=>undefined,async calls=>{const response=await handler({httpMethod:'GET',headers:{}});assert.equal(response.statusCode,200);assert.equal(JSON.parse(response.body).ready,true);assert(!response.body.includes(env.SUPABASE_SECRET_KEY));assert.equal(calls.length,0);delete process.env.SUPABASE_SECRET_KEY;const missing=await handler({httpMethod:'GET',headers:{}});assert.equal(missing.statusCode,503);assert(JSON.parse(missing.body).missing.includes('SUPABASE_SECRET_KEY'));});
 });
+
+test('MNCS admins can provision judges and independent auditors without an association',async()=>{
+ for(const role of ['judge','auditor'])await withMock(path=>({'/auth/v1/user':{id:'admin-id'},'/rest/v1/profiles':[{role:'admin'}],'/auth/v1/admin/users':{id:'official-id'}}[path]),async calls=>{const response=await handler(event({...account,association_id:null,role,action:'create-account'}));assert.equal(response.statusCode,201);const p=calls.find(c=>c.path==='/rest/v1/profiles'&&c.method==='POST');assert.equal(p.body.role,role);assert.equal(p.body.association_id,null);});
+});

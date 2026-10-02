@@ -1,7 +1,7 @@
 // Isolated, in-memory simulator. No Supabase or account-service calls.
 (() => {
 const tables={registry:[],profiles:[],submissions:[],reporting_requirements:[],award_cycles:[]};
-const users=[['admin','admin@mncs.example','admin',null],['reviewer','reviewer@mncs.example','reviewer',null],['association','association@mncs.example','association','DEMO-ASSOC']].map(([id,email,role,association_id])=>({id,email,password:'1234',role,association_id,display_name:'Demo '+role}));
+const users=[...Array.from({length:5},(_,i)=>['judge'+(i+1),'judge'+(i+1)+'@mncs.example','judge',null]),['auditor','auditor@mncs.example','auditor',null],['fan','fan@mncs.example','fan',null],['admin','admin@mncs.example','admin',null],['reviewer','reviewer@mncs.example','reviewer',null],['association','association@mncs.example','association','DEMO-ASSOC']].map(([id,email,role,association_id])=>({id,email,password:'1234',role,association_id,display_name:'Demo '+role}));
 tables.profiles=users.map(({password,...p})=>p);
 tables.registry=[{collection:'associations',id:'DEMO-ASSOC',payload:{id:'DEMO-ASSOC',name:'Demonstration Sports Association',shortName:'DEMO',sport:'Demonstration',status:'Under Review'}}];
 let session=null;const files=new Map();
@@ -9,7 +9,16 @@ const ready=fetch('data/researched-associations.json').then(r=>r.json()).then(re
 const current=()=>tables.profiles.find(p=>p.id===session?.user.id);
 const error=message=>({data:null,error:{message}});
 const ok=data=>({data,error:null});
-function accessible(table,row){const p=current();if(table==='registry'||table==='award_cycles')return true;if(!p)return false;if(table==='profiles')return p.role==='admin'||p.id===row.id;return ['admin','reviewer'].includes(p.role)||row.association_id===p.association_id;}
+function accessible(table,row){const p=current();if(table==='registry'||table==='award_cycles'||table==='award_categories')return true;if(!p)return false;if(table==='profiles')return p.role==='admin'||p.id===row.id;
+ const assigned=(y,c,d)=>tables.award_assignments?.some(a=>a.year===y&&a.category===c&&a.user_id===p.id&&(!d||a.duty===d));
+ if(table==='award_assignments')return p.role==='admin'||row.user_id===p.id;
+ if(table==='award_candidates')return ['admin','reviewer'].includes(p.role)||assigned(row.year,row.category)||row.association_id===p.association_id;
+ if(table==='award_ballots'){const c=tables.award_candidates?.find(c=>c.id===row.candidate_id),g=tables.award_categories?.find(g=>g.year===c?.year&&g.category===c?.category);return row.judge_id===p.id||['Auditing','Published'].includes(g?.phase)&&(p.role==='admin'||assigned(c.year,c.category,'auditor'));}
+ if(table==='award_audits'||table==='award_log')return p.role==='admin'||assigned(row.year,row.category,'auditor');
+ if(table==='tournament_matches'){const t=tables.tournaments?.find(t=>t.id===row.tournament_id);return ['admin','reviewer'].includes(p.role)||t?.association_id===p.association_id;}
+ if(table==='submissions'&&tables.award_candidates?.some(c=>c.nomination_id===row.id&&assigned(c.year,c.category)))return true;
+ return ['admin','reviewer'].includes(p.role)||row.association_id===p.association_id;}
+
 function query(table){let filters=[],operation='select',values=null,single=false;
  const q={select(){return q;},eq(key,value){filters.push(r=>r[key]===value);return q;},contains(key,value){filters.push(r=>Object.entries(value).every(([k,v])=>r[key]?.[k]===v));return q;},order(){return q;},maybeSingle(){single=true;return q;},insert(data){operation='insert';values=data;return q;},upsert(data){operation='upsert';values=data;return q;},then(resolve,reject){return execute().then(resolve,reject);}};
  async function execute(){await ready;if(!tables[table])return error('Unknown demo table');
@@ -40,7 +49,7 @@ const db={demo:true,from:query,auth:{async getSession(){await ready;return ok({s
  }return error('Unsupported demo operation');
 },async demoAction(body){if(current()?.role!=='admin')throw Error('Demo administrator required');
  if(body.action==='reset-password'){const u=users.find(u=>u.id===body.user_id);if(!u)throw Error('User not found');u.password=body.password;return {message:'Demo password reset.'};}
- if(body.action==='create-account'){if(!['admin','reviewer','association'].includes(body.role))throw Error('Invalid demo role');if(users.some(u=>u.email===body.email))throw Error('Demo email already exists');if(body.role==='association'&&!tables.registry.some(r=>r.id===body.association_id))throw Error('Select an association');const u={...body,id:crypto.randomUUID(),association_id:body.role==='association'?body.association_id:null};users.push(u);const {password,...profile}=u;tables.profiles.push(profile);return {message:'Demo account created in memory.'};}
+ if(body.action==='create-account'){if(!['admin','reviewer','association','judge','auditor'].includes(body.role))throw Error('Invalid demo role');if(users.some(u=>u.email===body.email))throw Error('Demo email already exists');if(body.role==='association'&&!tables.registry.some(r=>r.id===body.association_id))throw Error('Select an association');const u={...body,id:crypto.randomUUID(),association_id:body.role==='association'?body.association_id:null};users.push(u);const {password,...profile}=u;tables.profiles.push(profile);return {message:'Demo account created in memory.'};}
  throw Error('Unsupported demo account action');
 }};
 window.MNCS_CONFIG={demo:true,supabaseUrl:'demo-only',supabaseKey:'demo-only'};

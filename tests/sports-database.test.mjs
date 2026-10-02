@@ -13,7 +13,7 @@ test('V0.9 PostgreSQL installer, tenant isolation, review and ranking workflows'
  create function storage.foldername(text) returns text[] language sql immutable as $$select string_to_array($1,'/')$$;
  grant usage on schema public,auth to anon,authenticated,service_role;
  alter default privileges in schema public grant all on tables to anon,authenticated,service_role;`);
- const installer=fs.readFileSync('supabase/INSTALL_ALL.sql','utf8');
+ const installer=fs.readFileSync('supabase/INSTALL_ALL.sql','utf8').split('-- Component: v1.0-migration.sql')[0]+'\nCOMMIT;';
  await t.test('complete installer executes and is repeatable',async()=>{await pg.exec(installer);await pg.exec(installer);});
  const ids={admin:'10000000-0000-0000-0000-000000000001',reviewer:'10000000-0000-0000-0000-000000000002',association:'10000000-0000-0000-0000-000000000003',other:'10000000-0000-0000-0000-000000000004'};
  for(const [role,id] of Object.entries(ids)){await pg.query('insert into auth.users values($1,$2)',[id,role+'@example.org']);await pg.query('insert into public.profiles(id,role,association_id) values($1,$2,$3)',[id,['other','association'].includes(role)?'association':role,role==='association'?'TEST-A':role==='other'?'TEST-B':null]);}

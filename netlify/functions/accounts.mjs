@@ -9,7 +9,7 @@ export function validateAccount(body){
  if(password.length<12||password.length>128)throw Error('Use a password between 12 and 128 characters.');
  if(!display_name||display_name.length>120)throw Error('Enter a name of up to 120 characters.');
  const role=body.action==='bootstrap'?'admin':body.role;
- if(!['admin','reviewer','association'].includes(role))throw Error('Invalid account role.');
+ if(!['admin','reviewer','association','judge','auditor'].includes(role))throw Error('Invalid account role.');
  const association_id=role==='association'?String(body.association_id||''):null;
  if(role==='association'&&!/^[A-Za-z0-9_-]{1,80}$/.test(association_id))throw Error('Select a registered association.');
  return {email,password,display_name,role,association_id};
