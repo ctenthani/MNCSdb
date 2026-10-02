@@ -119,8 +119,7 @@ Preview roles are not authentication and must never be used with real records.
 The PDF bucket is private with a 10 MB size limit. Signed links expire in 60 seconds.
 The database records review transitions and locks status changes inside a transaction.
 Approval publishes selected association profile fields only, keeping contacts private.
-A returned record remains in history; corrections are submitted as a new draft for
-that type/period. The original record and reviewer comment remain visible.
+In v0.3, returned records are corrected in place and retain their review history.
 Public athlete details omit phone numbers and birth dates, including from sample files.
 Event date status is computed in Africa/Blantyre: Past does not certify completion.
 
@@ -130,3 +129,11 @@ Supabase administrator. Database policies require live integration testing; stat
 checks alone cannot establish production security.
 
 Run checks: `node --test tests/registry.test.cjs`.
+
+## v0.3
+
+Editable drafts/returned records retain their history and can replace supporting PDFs.
+MNCS reviewers can configure reporting requirements with deadlines, then export a
+management CSV showing Missing, Draft, Submitted, Returned and Approved records.
+See `SUPABASE_SETUP.md` for the full setup, including the additional migration.
+The supplied project URL and public publishable key are configured. Run the database migrations and provision accounts before live use.

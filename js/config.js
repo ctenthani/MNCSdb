@@ -1,2 +1,5 @@
-// Only the public publishable/anon key belongs here. Never use a service-role key.
-window.MNCS_CONFIG = { supabaseUrl: '', supabaseKey: '' };
+// Browser-safe configuration: never add a secret or service-role key.
+window.MNCS_CONFIG = {
+  supabaseUrl: 'https://owvuayretqnibwwhonch.supabase.co',
+  supabaseKey: 'sb_publishable_FQF-YQLAiU4o7TPO2OSWFw_TEy7Df_T'
+};
