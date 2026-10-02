@@ -31,11 +31,16 @@ window.renderAwards=async()=>{
   if(!cycles.length)cycleSummary.innerHTML+='<p>No awards cycles configured yet.</p>';
   workspace.before(cycleSummary);
   if(profile&&['admin','reviewer'].includes(profile.role)){
+   const incoming=window.MNCS_AWARD_NOMINATIONS||[];
    const queue={data:(await window.MNCS_SPORTS.all(db,'submissions')).filter(s=>s.kind==='Award nomination')};
+   const rows=[...incoming.map(m=>({category:m.payload.categoryId||m.payload.title,nominee:m.payload.nomineeName,association:getAssociation(m.association_id).name,period:m.period,status:m.status,summary:m.payload.motivation||''})),...queue.data.map(s=>({category:s.payload.categoryId,nominee:s.payload.nomineeName,association:getAssociation(s.association_id).name,period:s.period,status:s.status,summary:s.payload.motivation||''}))];
+   const csv=list=>{const head=['category','nominee','association','period','status','summary'];return [head.join(',')].concat(list.map(r=>head.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))).join('\n');};
+   const save=(name,list)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv(list)],{type:'text/csv'}));a.download=name;a.click();};
    const consolePanel=document.createElement('section');consolePanel.className='workspace-help';
-   consolePanel.innerHTML='<h3>Nomination screening overview</h3><p>'+['Draft','Submitted','Returned','Approved'].map(status=>status+': '+queue.data.filter(n=>n.status===status).length).join(' · ')+'</p><p>Approval confirms dossier screening, not an award win.</p><button id="awards-review-queue">Open MNCS review queue</button>';
+   consolePanel.innerHTML='<h3>Nominations in Awards</h3><p>Association nominations arrive here, not in the council inbox. '+rows.length+' nomination(s).</p><button id="awards-download-all" type="button">Download all nominations</button> <button id="awards-download-category" type="button">Download selected category</button> <select id="awards-category-file"><option value="">All categories</option>'+[...new Set(rows.map(r=>r.category).filter(Boolean))].map(c=>`<option>${esc(c)}</option>`).join('')+'</select><div class="overflow-x-auto"><table><thead><tr><th>Category</th><th>Nominee</th><th>Association</th><th>Period</th><th>Status</th></tr></thead><tbody>'+rows.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.nominee)}</td><td>${esc(r.association)}</td><td>${esc(r.period)}</td><td>${esc(r.status)}</td></tr>`).join('')+'</tbody></table></div>';
    workspace.before(consolePanel);
-   document.getElementById('awards-review-queue').onclick=()=>{switchView('portal');document.querySelector('[data-panel="submissions"]')?.click();};
+   document.getElementById('awards-download-all').onclick=()=>save('mncs-nominations.csv',rows);
+   document.getElementById('awards-download-category').onclick=()=>{const id=document.getElementById('awards-category-file').value;const list=id?rows.filter(r=>r.category===id):rows;save((id||'all')+'-nominations.csv',list);};
   }
   await window.MNCS_AWARDS_DESK?.mount(document.getElementById('awards-operations'),db,profile,categories,cycles);
   if(profile?.role==='admin'){
