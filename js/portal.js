@@ -127,7 +127,7 @@ async function saveDraft(e) {
  if(!['Profile update','Funding request','Travel abroad','MRA clearance','Other request'].includes(existing?.kind||e.target.dataset?.sourceKind||f.get('kind'))&&!file.size&&!existing?.document_path)throw Error('Attach a supporting PDF for this document submission.');
  if(file.size&&(file.type!=='application/pdf'||file.size>10*1024*1024))throw Error('Use a PDF no larger than 10 MB.');
  const kind=existing?.kind||e.target.dataset?.sourceKind||f.get('kind'),period=existing?.period||String(f.get('period')).trim();
- if(submissions.some(s=>s.id!==editingId&&s.association_id===profile.association_id&&!['Funding request','Travel abroad','MRA clearance','Other request'].includes(kind)&&s.kind===kind&&s.period===period&&['Draft','Submitted','Approved'].includes(s.status)))throw Error('A submission already exists for this type and period.');
+ if(kind==='Award nomination'&&submissions.some(s=>s.id!==editingId&&s.association_id===profile.association_id&&s.kind==='Award nomination'&&s.period===period&&s.payload?.categoryId===payload.categoryId&&['Draft','Submitted','Approved'].includes(s.status)))throw Error('This association has already nominated in this category for the year.');
  const row={id:crypto.randomUUID(),association_id:profile.association_id,created_by:user.id,kind,period,payload,status:'Draft',history:[],document_path:null};
  if(existing){
   let path=existing.document_path;

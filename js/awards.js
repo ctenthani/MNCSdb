@@ -37,10 +37,21 @@ window.renderAwards=async()=>{
    const csv=list=>{const head=['category','nominee','association','period','status','summary'];return [head.join(',')].concat(list.map(r=>head.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))).join('\n');};
    const save=(name,list)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv(list)],{type:'text/csv'}));a.download=name;a.click();};
    const consolePanel=document.createElement('section');consolePanel.className='workspace-help';
-   consolePanel.innerHTML='<h3>Nominations in Awards</h3><p>Association nominations arrive here, not in the council inbox. '+rows.length+' nomination(s).</p><button id="awards-download-all" type="button">Download all nominations</button> <button id="awards-download-category" type="button">Download selected category</button> <select id="awards-category-file"><option value="">All categories</option>'+[...new Set(rows.map(r=>r.category).filter(Boolean))].map(c=>`<option>${esc(c)}</option>`).join('')+'</select><div class="overflow-x-auto"><table><thead><tr><th>Category</th><th>Nominee</th><th>Association</th><th>Period</th><th>Status</th></tr></thead><tbody>'+rows.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.nominee)}</td><td>${esc(r.association)}</td><td>${esc(r.period)}</td><td>${esc(r.status)}</td></tr>`).join('')+'</tbody></table></div>';
+   consolePanel.innerHTML='<h3>Nominations in Awards</h3><p>Association nominations arrive here, not in the council inbox. '+rows.length+' nomination(s).</p><label>View category<select id="awards-view-filter"><option value="">All categories</option>'+[...new Set(rows.map(r=>r.category).filter(Boolean))].map(c=>`<option>${esc(c)}</option>`).join('')+'</select></label> <button id="awards-download-all" type="button">Download all nominations</button> <button id="awards-download-category" type="button">Download this category</button><div class="overflow-x-auto" id="awards-nom-table"></div><h3>Category weights</h3><p>Weights are used when MNCS compares categories. Download the file, edit it, then upload it back, or change a weight and save.</p><button id="weights-download" type="button">Download weights</button> <label>Upload weights<input id="weights-upload" type="file" accept="application/json"></label><div id="weights-editor"></div>';
    workspace.before(consolePanel);
+   const paint=(filter)=>{const list=filter?rows.filter(r=>r.category===filter):rows;document.getElementById('awards-nom-table').innerHTML='<table><thead><tr><th>Category</th><th>Nominee</th><th>Association</th><th>Period</th><th>Status</th></tr></thead><tbody>'+list.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.nominee)}</td><td>${esc(r.association)}</td><td>${esc(r.period)}</td><td>${esc(r.status)}</td></tr>`).join('')+'</tbody></table>';};
+   paint('');
+   document.getElementById('awards-view-filter').onchange=e=>paint(e.target.value);
    document.getElementById('awards-download-all').onclick=()=>save('mncs-nominations.csv',rows);
-   document.getElementById('awards-download-category').onclick=()=>{const id=document.getElementById('awards-category-file').value;const list=id?rows.filter(r=>r.category===id):rows;save((id||'all')+'-nominations.csv',list);};
+   document.getElementById('awards-download-category').onclick=()=>{const id=document.getElementById('awards-view-filter').value;save((id||'all')+'-nominations.csv',id?rows.filter(r=>r.category===id):rows);};
+   const weightKey='mncs_category_weights';
+   let weights={};try{weights=JSON.parse(localStorage.getItem(weightKey)||'{}');}catch{weights={};}
+   categories.forEach(c=>{if(weights[c.id]==null)weights[c.id]=1;});
+   const editor=document.getElementById('weights-editor');
+   const paintWeights=()=>{editor.innerHTML=categories.map(c=>`<label>${esc(c.name)}<input data-weight="${esc(c.id)}" type="number" min="0" step="0.1" value="${Number(weights[c.id])}"></label>`).join('')+'<button id="weights-save" type="button">Save weights</button>';editor.querySelector('#weights-save').onclick=()=>{editor.querySelectorAll('[data-weight]').forEach(i=>weights[i.dataset.weight]=Number(i.value));localStorage.setItem(weightKey,JSON.stringify(weights));};};
+   paintWeights();
+   document.getElementById('weights-download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(categories.map(c=>({id:c.id,name:c.name,weight:weights[c.id]})),null,2)],{type:'application/json'}));a.download='mncs-category-weights.json';a.click();};
+   document.getElementById('weights-upload').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);data.forEach(row=>{if(row.id)weights[row.id]=Number(row.weight);});localStorage.setItem(weightKey,JSON.stringify(weights));paintWeights();}catch{alert('Weights file must be JSON with id and weight.');}};reader.readAsText(file);};
   }
   await window.MNCS_AWARDS_DESK?.mount(document.getElementById('awards-operations'),db,profile,categories,cycles);
   if(profile?.role==='admin'){
@@ -88,8 +99,9 @@ window.renderAwards=async()=>{
     const payload={categoryId:category.id,categoryName:category.name,nomineeType:category.nomineeType,nomineeName:name,athleteId:String(f.get('athleteId')||'').trim(),description:String(f.get('description')).trim(),motivation:String(f.get('motivation')).trim(),dateOfBirth:String(f.get('dateOfBirth')||''),declaration:true,screeningOnly:true};
     if(event.target.dataset.sourceIntegrationId)payload.sourceIntegrationId=event.target.dataset.sourceIntegrationId;
     if(category.id.startsWith('junior-')&&!payload.dateOfBirth)throw Error('Junior nominations require a date of birth and evidence in the supporting PDF.');
-    const exists=await db.from('submissions').select('id').eq('association_id',profile.association_id).eq('kind','Award nomination').eq('period',period).contains('payload',{categoryId:category.id,nomineeName:name});
-    if(exists.error)throw exists.error;if(exists.data.length)throw Error('A nomination for this person/category/year already exists.');
+    const exists=await db.from('submissions').select('id,payload').eq('association_id',profile.association_id).eq('kind','Award nomination').eq('period',period);
+    if(exists.error)throw exists.error;
+    if((exists.data||[]).some(s=>s.payload?.categoryId===category.id))throw Error('This association has already nominated in this category for the year. Duplicate nominations are locked.');
     const upload=await db.storage.from('association-documents').upload(document_path,file,{contentType:'application/pdf'});if(upload.error)throw upload.error;
     const saved=await db.from('submissions').insert({id,association_id:profile.association_id,created_by:user.id,kind:'Award nomination',period,payload,status:'Draft',history:[],document_path});if(saved.error)throw saved.error;
     await window.MNCS_REFRESH_PORTAL?.();event.target.reset();notice.textContent='Nomination draft saved. Open Workspace to submit the dossier for eligibility review. Official acceptance remains subject to MNCS cycle rules.';
