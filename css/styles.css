@@ -245,3 +245,22 @@ button:disabled {cursor:not-allowed;opacity:.45;}
 @media(max-width:420px){.award-category-grid{grid-template-columns:1fr}.award-category{padding:1rem}}
 /* National registry exchange */
 #connector-credentials{padding:1rem;background:#fff8d7;border:1px solid #e8dca0;border-radius:10px;margin-top:1rem}#connector-credentials input{font-family:monospace}#workspace-connections a,#workspace-competitions a,#workspace-exchange a,.national-performance a{color:#166534;text-decoration:underline}.national-performance{margin-bottom:1.5rem}.national-performance h3{font-weight:700;font-size:1.2rem}#workspace-exchange dd{white-space:pre-wrap}#workspace-competitions pre{white-space:pre-wrap;overflow-wrap:anywhere}#connector-form{max-width:780px}
+
+.award-actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:end;margin:.6rem 0}
+.weights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.6rem}
+.weights-grid label{display:grid;gap:.2rem;font-size:.85rem}
+.weights-grid input{width:100
+.noms-desk{display:grid;gap:1rem}
+.noms-desk h3{margin:0;font-size:1.15rem}
+.noms-desk p{margin:0;color:#475569}
+.noms-toolbar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:end}
+.noms-toolbar label{display:grid;gap:.25rem;min-width:220px;font-size:.8rem;font-weight:700;color:#334155}
+.noms-toolbar select,.noms-toolbar button,.weights-grid button{width:auto;margin:0;padding:.55rem .8rem;border-radius:8px}
+.noms-toolbar select{min-width:220px;border:1px solid #cbd5e1;background:white}
+.noms-toolbar button,.weights-grid button{background:#166534;color:white;border:0;font-weight:700}
+.file-pick input{display:block;margin-top:.25rem;font-weight:500}
+.weights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.75rem}
+.weights-grid label{display:grid!important;grid-template-columns:1fr 88px;gap:.5rem;align-items:center;background:white;border:1px solid #e2e8f0;border-radius:10px;padding:.7rem .8rem;margin:0!important}
+.weights-grid span{font-size:.85rem;line-height:1.3}
+.weights-grid input{width:88px!important;margin:0;padding:.4rem;border:1px solid #cbd5e1;border-radius:8px}
+.weights-grid button{grid-column:1/-1;justify-self:start}

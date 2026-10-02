@@ -2,7 +2,9 @@
 let categories=null;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 window.renderAwards=async()=>{
- const root=document.getElementById('awards-content');root.textContent='Loading award categories…';
+ const root=document.getElementById('awards-content');
+ if(!root)return;
+ root.textContent='Loading award categories…';
  try{
   if(!categories){const response=await fetch('data/award-categories.json');if(!response.ok)throw Error('Award categories could not be loaded.');categories=await response.json();}
   const db=window.MNCS_DB;let profile=null,user=null;
@@ -29,7 +31,7 @@ window.renderAwards=async()=>{
   const cycleSummary=document.createElement('div');cycleSummary.className='workspace-help';
   cycleSummary.innerHTML='<h3>Awards nomination windows</h3>'+cycles.map(c=>`<p>${c.year}: <strong>${esc(c.nomination_status||'Closed')}</strong> · junior reference date ${esc(c.age_reference_date||'not set')} · ${esc(c.scoring_policy)}. Official results are published after independent audit.</p>`).join('');
   if(!cycles.length)cycleSummary.innerHTML+='<p>No awards cycles configured yet.</p>';
-  workspace.before(cycleSummary);
+  if(workspace)workspace.before(cycleSummary);
   if(profile&&['admin','reviewer'].includes(profile.role)){
    const incoming=window.MNCS_AWARD_NOMINATIONS||[];
    const queue={data:(await window.MNCS_SPORTS.all(db,'submissions')).filter(s=>s.kind==='Award nomination')};
@@ -37,21 +39,21 @@ window.renderAwards=async()=>{
    const csv=list=>{const head=['category','nominee','association','period','status','summary'];return [head.join(',')].concat(list.map(r=>head.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))).join('\n');};
    const save=(name,list)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv(list)],{type:'text/csv'}));a.download=name;a.click();};
    const consolePanel=document.createElement('section');consolePanel.className='workspace-help';
-   consolePanel.innerHTML='<h3>Nominations in Awards</h3><p>Association nominations arrive here, not in the council inbox. '+rows.length+' nomination(s).</p><label>View category<select id="awards-view-filter"><option value="">All categories</option>'+[...new Set(rows.map(r=>r.category).filter(Boolean))].map(c=>`<option>${esc(c)}</option>`).join('')+'</select></label> <button id="awards-download-all" type="button">Download all nominations</button> <button id="awards-download-category" type="button">Download this category</button><div class="overflow-x-auto" id="awards-nom-table"></div><h3>Category weights</h3><p>Weights are used when MNCS compares categories. Download the file, edit it, then upload it back, or change a weight and save.</p><button id="weights-download" type="button">Download weights</button> <label>Upload weights<input id="weights-upload" type="file" accept="application/json"></label><div id="weights-editor"></div>';
-   workspace.before(consolePanel);
-   const paint=(filter)=>{const list=filter?rows.filter(r=>r.category===filter):rows;document.getElementById('awards-nom-table').innerHTML='<table><thead><tr><th>Category</th><th>Nominee</th><th>Association</th><th>Period</th><th>Status</th></tr></thead><tbody>'+list.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.nominee)}</td><td>${esc(r.association)}</td><td>${esc(r.period)}</td><td>${esc(r.status)}</td></tr>`).join('')+'</tbody></table>';};
+   consolePanel.innerHTML=`<div class="noms-desk"><h3>Nominations in Awards</h3><p>${rows.length} nomination(s). These stay on Awards, not in the council inbox.</p><div class="noms-toolbar"><label>View category<select id="awards-view-filter"><option value="">All categories</option>${[...new Set(rows.map(r=>r.category).filter(Boolean))].map(c=>`<option>${esc(c)}</option>`).join('')}</select></label><button id="awards-download-all" type="button">Download all</button><button id="awards-download-category" type="button">Download this category</button></div><div class="overflow-x-auto" id="awards-nom-table"></div><h3>Category weights</h3><p>Change a number and save, or download the file, edit it and upload it back.</p><div class="noms-toolbar"><button id="weights-download" type="button">Download weights</button><label class="file-pick">Upload weights<input id="weights-upload" type="file" accept="application/json"></label></div><div id="weights-editor" class="weights-grid"></div></div>`;
+   if(workspace)workspace.before(consolePanel);
+   const paint=(filter)=>{const list=filter?rows.filter(r=>r.category===filter):rows;const table=consolePanel.querySelector('#awards-nom-table');if(!table)return;table.innerHTML='<table><thead><tr><th>Category</th><th>Nominee</th><th>Association</th><th>Period</th><th>Status</th></tr></thead><tbody>'+(list.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.nominee)}</td><td>${esc(r.association)}</td><td>${esc(r.period)}</td><td>${esc(r.status)}</td></tr>`).join('')||'<tr><td colspan="5">No nominations in this category.</td></tr>')+'</tbody></table>';};
    paint('');
-   document.getElementById('awards-view-filter').onchange=e=>paint(e.target.value);
-   document.getElementById('awards-download-all').onclick=()=>save('mncs-nominations.csv',rows);
-   document.getElementById('awards-download-category').onclick=()=>{const id=document.getElementById('awards-view-filter').value;save((id||'all')+'-nominations.csv',id?rows.filter(r=>r.category===id):rows);};
+   consolePanel.querySelector('#awards-view-filter').onchange=e=>paint(e.target.value);
+   consolePanel.querySelector('#awards-download-all').onclick=()=>save('mncs-nominations.csv',rows);
+   consolePanel.querySelector('#awards-download-category').onclick=()=>{const id=consolePanel.querySelector('#awards-view-filter').value;save((id||'all')+'-nominations.csv',id?rows.filter(r=>r.category===id):rows);};
    const weightKey='mncs_category_weights';
    let weights={};try{weights=JSON.parse(localStorage.getItem(weightKey)||'{}');}catch{weights={};}
    categories.forEach(c=>{if(weights[c.id]==null)weights[c.id]=1;});
-   const editor=document.getElementById('weights-editor');
-   const paintWeights=()=>{editor.innerHTML=categories.map(c=>`<label>${esc(c.name)}<input data-weight="${esc(c.id)}" type="number" min="0" step="0.1" value="${Number(weights[c.id])}"></label>`).join('')+'<button id="weights-save" type="button">Save weights</button>';editor.querySelector('#weights-save').onclick=()=>{editor.querySelectorAll('[data-weight]').forEach(i=>weights[i.dataset.weight]=Number(i.value));localStorage.setItem(weightKey,JSON.stringify(weights));};};
+   const editor=consolePanel.querySelector('#weights-editor');
+   const paintWeights=()=>{if(!editor)return;editor.innerHTML=categories.map(c=>`<label><span>${esc(c.name)}</span><input data-weight="${esc(c.id)}" type="number" min="0" step="0.1" value="${Number(weights[c.id])}"></label>`).join('')+'<button id="weights-save" type="button">Save weights</button>';editor.querySelector('#weights-save').onclick=()=>{editor.querySelectorAll('[data-weight]').forEach(i=>weights[i.dataset.weight]=Number(i.value));localStorage.setItem(weightKey,JSON.stringify(weights));};};
    paintWeights();
-   document.getElementById('weights-download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(categories.map(c=>({id:c.id,name:c.name,weight:weights[c.id]})),null,2)],{type:'application/json'}));a.download='mncs-category-weights.json';a.click();};
-   document.getElementById('weights-upload').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);data.forEach(row=>{if(row.id)weights[row.id]=Number(row.weight);});localStorage.setItem(weightKey,JSON.stringify(weights));paintWeights();}catch{alert('Weights file must be JSON with id and weight.');}};reader.readAsText(file);};
+   consolePanel.querySelector('#weights-download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(categories.map(c=>({id:c.id,name:c.name,weight:weights[c.id]})),null,2)],{type:'application/json'}));a.download='mncs-category-weights.json';a.click();};
+   consolePanel.querySelector('#weights-upload').onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);data.forEach(row=>{if(row.id)weights[row.id]=Number(row.weight);});localStorage.setItem(weightKey,JSON.stringify(weights));paintWeights();}catch{alert('Weights file must be JSON with id and weight.');}};reader.readAsText(file);};
   }
   await window.MNCS_AWARDS_DESK?.mount(document.getElementById('awards-operations'),db,profile,categories,cycles);
   if(profile?.role==='admin'){
