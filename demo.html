@@ -18,7 +18,7 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-lg">MN</div>
           <div>
-            <h1 class="text-lg font-bold leading-tight">MNCS Registry <span class="registry-version">V0.8</span></h1>
+            <h1 class="text-lg font-bold leading-tight">MNCS Registry <span class="registry-version">V0.9</span></h1>
             <p class="text-xs text-green-100 hidden sm:block">Malawi sport, connected</p>
           </div>
         </div>
@@ -58,7 +58,7 @@
 <section id="view-portal" class="view hidden"><h2 class="text-xl font-bold mb-4">Association submissions and MNCS review</h2><p id="portal-notice" role="status" aria-live="polite"></p><div id="portal-content"></div></section>
 <section id="view-awards" class="view hidden"><h2 class="text-xl font-bold mb-4">Malawi Sport Awards</h2><div id="awards-content"></div></section>
     <!-- Views -->
-    <div id="view-dashboard" class="view"><section class="registry-hero"><div><p class="eyebrow">THE NATIONAL SPORTS REGISTER</p><h2>One place.<br>Every sporting story.</h2><p>Explore Malawi’s associations, athletes and competitions. Follow the records that connect our sporting community.</p><div class="hero-actions"><button type="button" id="explore-directory">Explore associations <span aria-hidden="true">↗</span></button><button type="button" id="open-workspace">Association workspace</button></div></div><aside class="hero-aside"><div class="hero-mark" aria-hidden="true">MW<span>SPORT</span></div><p>Built on verified records.<br>Driven by our associations.</p><span class="edition-tag">REGISTRY / V0.8</span></aside></section>
+    <div id="view-dashboard" class="view"><section class="registry-hero"><div><p class="eyebrow">THE NATIONAL SPORTS REGISTER</p><h2>One place.<br>Every sporting story.</h2><p>Explore Malawi’s associations, athletes and competitions. Follow the records that connect our sporting community.</p><div class="hero-actions"><button type="button" id="explore-directory">Explore associations <span aria-hidden="true">↗</span></button><button type="button" id="open-workspace">Association workspace</button></div></div><aside class="hero-aside"><div class="hero-mark" aria-hidden="true">MW<span>SPORT</span></div><p>Built on verified records.<br>Driven by our associations.</p><span class="edition-tag">REGISTRY / V0.9</span></aside></section>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <p class="text-sm text-slate-500">Associations</p>
@@ -130,6 +130,7 @@
         </select>
       </div>
       <div id="events-list" class="space-y-3"></div>
+      <h3 class="font-bold mt-5">Approved fixture calendar</h3><div id="public-fixtures" class="space-y-3 mt-3"></div>
     </div>
 
     <div id="view-results" class="view hidden">
@@ -152,17 +153,19 @@
   </div>
 
   <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-    <p>Malawi National Council of Sports (MNCS) — Registry V0.8</p>
+    <p>Malawi National Council of Sports (MNCS) — Registry V0.9</p>
     <p class="mt-1"><a href="demo.html">Open isolated workflow demo</a> • Pseudo logins use 1234</p>
   </footer>
 
   
   <script src="js/demo.js"></script>
+  <script src="js/demo-sports.js"></script>
   <script src="js/app.js"></script>
   <script src="js/reporting.js"></script>
   <script src="js/accounts.js"></script>
   <script src="js/award-scoring.js"></script>
   <script src="js/awards.js"></script>
+  <script src="js/sports.js"></script>
   <script src="js/portal.js"></script>
 </body>
 </html>

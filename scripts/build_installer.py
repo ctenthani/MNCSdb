@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 root=Path(__file__).resolve().parents[1]
-files=['schema.sql','v0.3-migration.sql','v0.4-migration.sql','v0.5-migration.sql','v0.6-migration.sql','v0.6.2-migration.sql','v0.7-migration.sql','researched-associations.sql']
+files=['schema.sql','v0.3-migration.sql','v0.4-migration.sql','v0.5-migration.sql','v0.6-migration.sql','v0.6.2-migration.sql','v0.7-migration.sql','researched-associations.sql','v0.9-migration.sql']
 chunks=[]
 for name in files:
  s=(root/'supabase'/name).read_text()
@@ -21,7 +21,7 @@ for name in files:
  s=s.replace('insert into public.initial_admin_setup(id) values(1);','insert into public.initial_admin_setup(id) values(1) on conflict(id) do nothing;')
  s=s.replace("false,10485760,array['application/pdf']);", "false,10485760,array['application/pdf']) on conflict(id) do update set public=false,file_size_limit=10485760,allowed_mime_types=array['application/pdf'];")
  chunks.append('-- Component: '+name+'\n'+s)
-header='''-- MNCS v0.8 COMPLETE INSTALLER
+header='''-- MNCS v0.9 COMPLETE INSTALLER
 -- Run this ONE file in Supabase SQL Editor. Replaces running individual migrations.
 -- Supports a new project or the earlier app schemas; preserves records and setup state.
 -- All changes commit together. If an existing incompatible record causes an error,

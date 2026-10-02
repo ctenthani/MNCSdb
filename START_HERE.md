@@ -1,52 +1,47 @@
-# MNCS Registry V0.8 — start here
+# MNCS Registry V0.9 — start here
 
-Read V0.8_RELEASE.md for the current release and deployment steps.
-Read V0.8_TEST_REPORT.md for what was and was not tested.
+Your working accounts and association submissions remain in place. This complete
+release adds Sports operations, Rankings and linked awards nominations.
 
-This ZIP contains all implemented features from v0.2 through V0.8. You do not need
-to deploy earlier ZIPs or run their SQL files individually.
+## Upgrade
 
-1. Make a backup/export of existing project data before installing.
-2. Open Supabase project `owvuayretqnibwwhonch` → SQL Editor.
-3. Paste and run **supabase/INSTALL_ALL.sql**. Run this one file only. It imports researched association candidates marked for MNCS verification and creates
-   new tables or updates the earlier app schemas, preserving records and initial
-   administrator setup state. Changes run inside a transaction; if incompatible
-   records cause an error, keep the error for review rather than deleting records.
-4. Upload the latest project files to the Git repository linked to Netlify.
-   Keep index.html at the repository root and preserve netlify/functions.
-   Netlify must build the server function; a static drop upload alone is insufficient.
-5. Configure these private Netlify environment variables for Functions and redeploy:
-   - SUPABASE_URL: https://owvuayretqnibwwhonch.supabase.co
-   - SUPABASE_SECRET_KEY: your private Supabase secret/service-role key
-   - SITE_ORIGIN: https://mncsdb.netlify.app (no trailing slash)
-   - MNCS_SETUP_CODE: random private code of at least 32 characters, initial setup only
-   Put private keys in Netlify, never GitHub or chat. Frontend public settings are
-   already configured in js/config.js.
-6. If no MNCS admin exists, open Workspace → Set up the initial MNCS administrator.
-   Create your account with your privately chosen email/password and setup code.
-   Remove MNCS_SETUP_CODE and redeploy after success. Existing admins should sign in.
-7. In Workspace, use Associations to register associations, then Create accounts to add their representatives. Association registration uses your signed-in administrator session and the new registry_admin_register database policy. Account creation still requires the Netlify function settings.
-8. In Awards, use Configure an awards cycle to enter the year and junior reference
-   date. The rule is under 20 on that date, not 20 or younger. 31 December of the
-   qualifying year is a possible reference date, but MNCS must choose it explicitly.
-9. If MNCS changes the handbook to judges-only official awards, disclose the change
-   clearly before opening participation. Public fan polls must say they do not
-   influence official awards. Record policy approval/disclosure in the cycle form.
-10. Test two association accounts, an MNCS reviewer and an MNCS administrator.
-    Check private documents/submissions are isolated and only admins create accounts.
+1. Back up/export your current Supabase data.
+2. In project `owvuayretqnibwwhonch`, open SQL Editor and run
+   **supabase/INSTALL_ALL.sql**. Run this one complete file, not every migration.
+3. Replace your Git-connected Netlify repository files with this package.
+   Keep index.html at the root and netlify/functions intact.
+4. Redeploy. Retain the working SUPABASE_URL, SUPABASE_SECRET_KEY and SITE_ORIGIN
+   Functions settings. Keep the private key secret. If needed, retain the
+   targeted SECRETS_SCAN_OMIT_KEYS=SUPABASE_URL Build setting; see
+   NETLIFY_DEPLOYMENT_FIX.md. No build command or new private credentials needed.
+5. Sign in with your existing account. Do not repeat initial-administrator setup.
 
-## Current scope
-Association submissions, account creation, reporting requirements, category
-information and award dossier screening are implemented. Scoring helpers are
-locally tested. Live judge scoring, verified public polling, official server-side
-rankings, auditor sign-off and appeals are not yet implemented. Cycle settings
-keep official ranking disabled; an Approved nomination is not an award win.
+## First sports workflow
 
-## Important installation limits
-The full installer was checked for SQL syntax, not executed against your live
-project. Live authentication, RLS, account service and document tests remain
-necessary. Prior manual edits to table definitions/policies may require review.
-Email invitations and forgotten-password recovery are not implemented.
+1. MNCS admin → Rankings → create the sport's agreed placing-points rule.
+2. Association → Sports operations → register athletes and/or teams; save and submit.
+3. MNCS reviewer/admin → Sports operations → approve those records.
+4. Association → create a competition with matching discipline/category and rule;
+   submit it; MNCS approves it.
+5. Association → enter fixtures/results; submit them; MNCS approves them.
+6. Public Players, Events, Results and the fixture calendar now display the
+   approved public records. Birth dates remain private.
+7. MNCS → Rankings → inspect points, counting competitions and shared ties.
+8. MNCS admin → Awards → choose year, set the junior age reference date and open
+   the nomination window. New nomination windows default to Closed.
+9. Association → Rankings → Prepare nomination, or Awards → choose an athlete
+   and Fill verified athlete details and achievements. Review the text and attach
+   the official evidence PDF; save, then submit through Workspace → Submissions.
 
-## v0.7 account error, demo and password resets
-Read V0.7_UPDATE.md for the SITE_ORIGIN fix, isolated pseudo accounts using 1234, sourced associations and administrator password resets.
+## Read before official use
+
+- **V0.9_RELEASE.md**: ranking rules, deployment, permissions and implemented scope.
+- **V0.9_TEST_REPORT.md**: local PostgreSQL/DOM checks and required live checks.
+- **demo.html**: isolated role walkthrough, fictional accounts, resets on reload.
+
+Rankings compare athletes within the same scoring rule/discipline/category/season.
+They are not awards decisions. Junior awards remain strictly under 20 on the
+configured reference date. Judge ballots, public polls and official audited award
+results are not implemented. Any judges-only amendment must be approved and
+publicly disclosed; fan participation must never be presented as affecting
+official results when its weight is zero.

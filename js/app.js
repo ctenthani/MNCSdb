@@ -107,6 +107,7 @@ function renderCurrentView() {
     renderPlayers(q);
   } else if (state.currentView === 'events') {
     renderEvents(q);
+    window.renderPublicFixtures?.();
   } else if (state.currentView === 'results') {
     renderResults(q);
   }
@@ -265,12 +266,13 @@ function renderResults(q) {
     const medalClass = r.medal ? `medal-${r.medal}` : '';
     return `
       <tr>
-        <td class="font-medium">${r.teamName || (player ? player.firstName + ' ' + player.lastName : r.playerId)}</td>
+        <td class="font-medium">${r.teamName || (player ? player.firstName + ' ' + player.lastName : 'Private athlete')}</td>
         <td>${event ? event.name : r.eventId}</td>
         <td>${r.category || '—'}</td>
         <td>${r.position ?? '—'}</td>
         <td class="${medalClass}">${r.medal || '—'}</td>
         <td>${r.performance || '—'} ${r.unit || ''}</td>
+        <td>${r.outcome || '—'}<br>${r.resultDate || ''}</td>
       </tr>`;
   }).join('');
 
@@ -278,16 +280,17 @@ function renderResults(q) {
     <table>
       <thead>
         <tr>
-          <th>Athlete</th>
+          <th>Participant</th>
           <th>Event</th>
           <th>Category</th>
           <th>Pos</th>
           <th>Medal</th>
           <th>Performance</th>
+          <th>Outcome / date</th>
         </tr>
       </thead>
       <tbody>
-        ${rows || '<tr><td colspan="6" class="text-center text-slate-400 py-8">No results found.</td></tr>'}
+        ${rows || '<tr><td colspan="7" class="text-center text-slate-400 py-8">No results found.</td></tr>'}
       </tbody>
     </table>`;
 }
