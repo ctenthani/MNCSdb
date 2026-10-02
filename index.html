@@ -29,8 +29,8 @@
           <button data-view="players" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Players</button>
           <button data-view="events" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Events</button>
           <button data-view="results" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Results</button>
-        </nav>
-        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-white/10">
+        <button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button></nav>
+        <button id="mobile-menu-btn" aria-label="Open navigation" class="md:hidden p-2 rounded-md hover:bg-white/10">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
@@ -41,9 +41,10 @@
       <button data-view="associations" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Associations</button>
       <button data-view="players" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Players</button>
       <button data-view="events" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Events</button>
+      <button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
       <button data-view="results" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Results</button>
     </div>
-  </header>
+<div id="data-banner" class="px-4 py-2 bg-amber-100 text-amber-900 text-sm">Demonstration data · unverified names, dates and results</div></header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <!-- Search bar (shared) -->
@@ -55,6 +56,7 @@
       </div>
     </div>
 
+<section id="view-portal" class="view hidden"><h2 class="text-xl font-bold mb-4">Association submissions and MNCS review</h2><p id="portal-notice" role="status" aria-live="polite"></p><div id="portal-content"></div></section>
     <!-- Views -->
     <div id="view-dashboard" class="view">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -138,7 +140,7 @@
           <option value="">All statuses</option>
           <option value="Upcoming">Upcoming</option>
           <option value="Ongoing">Ongoing</option>
-          <option value="Completed">Completed</option>
+          <option value="Past">Past (by date)</option>
         </select>
       </div>
       <div id="events-list" class="space-y-3"></div>
@@ -155,7 +157,7 @@
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between p-4 border-b">
         <h3 id="modal-title" class="font-semibold text-lg"></h3>
-        <button id="modal-close" class="p-1 rounded-full hover:bg-slate-100">
+        <button id="modal-close" aria-label="Close details" class="p-1 rounded-full hover:bg-slate-100">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -164,10 +166,13 @@
   </div>
 
   <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-    <p>Malawi National Council of Sports (MNCS) — Players Database Draft v0.1</p>
+    <p>Malawi National Council of Sports (MNCS) — Association Management v0.2</p>
     <p class="mt-1">Sample data for demonstration • Deployable on Netlify</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/portal.js"></script>
 </body>
 </html>

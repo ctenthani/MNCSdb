@@ -93,3 +93,40 @@ mncs-players-db/
 
 **Malawi National Council of Sports**  
 Draft prepared for demonstration and further development.
+
+## v0.2 setup
+
+The Workspace includes association drafts, PDF submissions and MNCS review.
+Without configuration it runs an explicitly labelled, in-memory workflow preview.
+Preview roles are not authentication and must never be used with real records.
+
+1. Create a Supabase project and run `supabase/schema.sql` in its SQL editor.
+2. Create users through Supabase Authentication, then provision `profiles` rows
+   using a trusted administrator connection. Association accounts require an
+   association ID matching a row in `registry`. Users cannot change their roles.
+3. Seed `registry` with verified records, using `collection`, `id` and `payload`.
+   Do not seed the included demonstration names/results as verified facts.
+   Public payloads must omit phone numbers, birth dates, private email addresses,
+   identification documents and other private data. Athlete registration is
+   not implemented in this release.
+4. Set the project URL and public publishable/anon key in `js/config.js`.
+   Never put a service-role key in the repository or browser.
+5. Deploy through the existing Netlify integration after reviewing a branch preview.
+6. Test with two different association accounts and a reviewer before production:
+   association A must not read B's submissions or documents, edit roles, approve
+   records or write public registry data. Anonymous users must not read submissions.
+
+The PDF bucket is private with a 10 MB size limit. Signed links expire in 60 seconds.
+The database records review transitions and locks status changes inside a transaction.
+Approval publishes selected association profile fields only, keeping contacts private.
+A returned record remains in history; corrections are submitted as a new draft for
+that type/period. The original record and reviewer comment remain visible.
+Public athlete details omit phone numbers and birth dates, including from sample files.
+Event date status is computed in Africa/Blantyre: Past does not certify completion.
+
+Funding, payments, account invitation UI, athlete editing and rankings are deferred.
+Account provisioning and initial verified association creation require a trusted
+Supabase administrator. Database policies require live integration testing; static
+checks alone cannot establish production security.
+
+Run checks: `node --test tests/registry.test.cjs`.

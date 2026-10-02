@@ -22,6 +22,23 @@ async function loadData() {
     state.events = await eventsRes.json();
     state.results = await resultsRes.json();
 
+    if (window.MNCS_DB) {
+      const {data,error} = await window.MNCS_DB.from('registry').select('*');
+      if(error) throw error;
+      ['associations','players','events','results'].forEach(k => state[k] = data.filter(r=>r.collection===k).map(r=>r.payload));
+      document.getElementById('data-banner').textContent = 'Connected registry · only approved public records are displayed';
+    }
+    // Public data must not contain private athlete or official contact details.
+    state.players.forEach(p=>{delete p.phone;delete p.dateOfBirth;});
+    state.associations.forEach(a=>{delete a.phone;delete a.email;});
+    const today = new Intl.DateTimeFormat('en-CA', {timeZone:'Africa/Blantyre',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    state.events.forEach(e=>{
+      e.confirmedStatus=e.status;
+      if(!['Cancelled','Postponed'].includes(e.status)) e.status=e.startDate>today?'Upcoming':(e.endDate||e.startDate)<today?'Past':'Ongoing';
+    });
+    // Escape strings before interpolation into HTML.
+    const safe = v => typeof v==='string'?v.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])):v;
+    [state.associations,state.players,state.events,state.results].forEach(rows=>rows.forEach(r=>Object.keys(r).forEach(k=>{r[k]=safe(r[k]);})));
     // Update player counts
     state.associations.forEach(a => {
       a.playerCount = state.players.filter(p => p.associationId === a.id).length;
@@ -271,7 +288,7 @@ function renderResults(q) {
     const medalClass = r.medal ? `medal-${r.medal}` : '';
     return `
       <tr>
-        <td class="font-medium">${player ? player.firstName + ' ' + player.lastName : r.playerId}</td>
+        <td class="font-medium">${r.teamName || (player ? player.firstName + ' ' + player.lastName : r.playerId)}</td>
         <td>${event ? event.name : r.eventId}</td>
         <td>${r.category || '—'}</td>
         <td>${r.position ?? '—'}</td>
@@ -310,7 +327,7 @@ function showPlayerDetail(id) {
     <p><span class="text-slate-500">Club / Team:</span> ${p.club || '—'}</p>
     <p><span class="text-slate-500">Position / Event:</span> ${p.position || '—'}</p>
     <p><span class="text-slate-500">Gender:</span> ${p.gender}</p>
-    <p><span class="text-slate-500">Date of Birth:</span> ${p.dateOfBirth || '—'}</p>
+
     <p><span class="text-slate-500">District:</span> ${p.district || '—'}</p>
     <p><span class="text-slate-500">National Team:</span> ${p.nationalTeam ? 'Yes' : 'No'}</p>
     <p><span class="text-slate-500">Status:</span> ${p.status}</p>
@@ -335,7 +352,7 @@ function showAssociationDetail(id) {
     <p><span class="text-slate-500">Last AGM:</span> ${a.lastAGM || '—'}</p>
     <p><span class="text-slate-500">Strategic Plan:</span> ${a.strategicPlan ? 'Submitted' : 'Not on file'}</p>
     <p><span class="text-slate-500">Registered Players (sample):</span> ${a.playerCount}</p>
-    ${a.website ? `<p><span class="text-slate-500">Website:</span> <a href="${a.website}" target="_blank" class="text-green-700 underline">${a.website}</a></p>` : ''}
+    ${a.website && /^https?:\/\//i.test(a.website) ? `<p><span class="text-slate-500">Website:</span> <a href="${a.website}" target="_blank" rel="noopener noreferrer" class="text-green-700 underline">${a.website}</a></p>` : ''}
   `;
   openModal();
 }

@@ -67,3 +67,14 @@ tr:hover td {
 #modal.show {
   display: flex;
 }
+#portal-content { background:white; padding:24px; border:1px solid #dce5df; border-radius:16px; }
+#portal-content h3 {font-size:1.15rem;font-weight:700;margin:16px 0;}
+#portal-content form {display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:20px 0;}
+#portal-content label {display:block;font-size:.9rem;}
+#portal-content input,#portal-content select,#portal-content textarea {display:block;width:100%;border:1px solid #b5c5ba;border-radius:8px;padding:10px;margin-top:5px;}
+#portal-content button {background:#166534;color:white;border-radius:8px;padding:9px 14px;margin:4px 0;}
+#portal-content button:disabled {opacity:.5;}
+.portal-heading,.portal-stats {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.submission-card {border:1px solid #dce5df;border-radius:12px;padding:16px;margin:16px 0;}
+.submission-card pre {white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;margin:12px 0;}
+#portal-notice {padding:12px;color:#14532d;}

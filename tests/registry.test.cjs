@@ -1,0 +1,5 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');
+const read=n=>JSON.parse(fs.readFileSync(`data/${n}.json`));
+test('sample records have unique IDs and valid relationships',()=>{const collections=['associations','players','events','results'];for(const k of collections){const rows=read(k);assert.equal(new Set(rows.map(r=>r.id)).size,rows.length);}const associations=new Set(read('associations').map(r=>r.id));for(const r of [...read('players'),...read('events')])assert(associations.has(r.associationId));const players=new Set(read('players').map(r=>r.id));const events=new Set(read('events').map(r=>r.id));for(const r of read('results')){assert(events.has(r.eventId));assert(r.teamName||players.has(r.playerId));}});
+test('public sample files contain no private athlete fields',()=>{for(const p of read('players')){assert(!('phone'in p));assert(!('dateOfBirth'in p));}});
+test('COSAFA sample is associated with football',()=>{const a=read('associations');for(const e of read('events').filter(e=>e.name.includes('COSAFA')))assert.equal(a.find(x=>x.id===e.associationId).shortName,'FAM');});

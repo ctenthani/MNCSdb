@@ -3,7 +3,6 @@
     "id": "PLY-0001",
     "firstName": "Gabadinho",
     "lastName": "Mhango",
-    "dateOfBirth": "1992-09-27",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -13,14 +12,12 @@
     "status": "Active",
     "registrationDate": "2010-03-15",
     "nationalTeam": true,
-    "phone": "+265 999 100 001",
     "email": "g.mhango@example.mw"
   },
   {
     "id": "PLY-0002",
     "firstName": "Richard",
     "lastName": "Mbulu",
-    "dateOfBirth": "1994-01-25",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -30,14 +27,12 @@
     "status": "Active",
     "registrationDate": "2012-06-20",
     "nationalTeam": true,
-    "phone": "+265 888 100 002",
     "email": null
   },
   {
     "id": "PLY-0003",
     "firstName": "Peter",
     "lastName": "Chadwick",
-    "dateOfBirth": "1997-05-12",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -47,14 +42,12 @@
     "status": "Active",
     "registrationDate": "2015-01-10",
     "nationalTeam": false,
-    "phone": "+265 999 100 003",
     "email": null
   },
   {
     "id": "PLY-0004",
     "firstName": "Chawanangwa",
     "lastName": "Kaonga",
-    "dateOfBirth": "1995-11-08",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -64,14 +57,12 @@
     "status": "Active",
     "registrationDate": "2014-08-22",
     "nationalTeam": true,
-    "phone": "+265 888 100 004",
     "email": null
   },
   {
     "id": "PLY-0005",
     "firstName": "Lawrence",
     "lastName": "Chaziya",
-    "dateOfBirth": "1998-03-30",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -81,14 +72,12 @@
     "status": "Active",
     "registrationDate": "2016-02-14",
     "nationalTeam": true,
-    "phone": "+265 999 100 005",
     "email": null
   },
   {
     "id": "PLY-0006",
     "firstName": "Mwai",
     "lastName": "Kumwenda",
-    "dateOfBirth": "1989-08-20",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Mzimba",
@@ -98,14 +87,12 @@
     "status": "Active",
     "registrationDate": "2006-05-01",
     "nationalTeam": true,
-    "phone": "+265 999 200 001",
     "email": "mwai.k@example.mw"
   },
   {
     "id": "PLY-0007",
     "firstName": "Joyce",
     "lastName": "Mvula",
-    "dateOfBirth": "1994-02-14",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -115,14 +102,12 @@
     "status": "Active",
     "registrationDate": "2011-09-15",
     "nationalTeam": true,
-    "phone": "+265 888 200 002",
     "email": null
   },
   {
     "id": "PLY-0008",
     "firstName": "Takondwa",
     "lastName": "Lwanda",
-    "dateOfBirth": "1996-07-03",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -132,14 +117,12 @@
     "status": "Active",
     "registrationDate": "2013-04-20",
     "nationalTeam": true,
-    "phone": "+265 999 200 003",
     "email": null
   },
   {
     "id": "PLY-0009",
     "firstName": "Thandie",
     "lastName": "Chalamanda",
-    "dateOfBirth": "1998-11-25",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -149,14 +132,12 @@
     "status": "Active",
     "registrationDate": "2015-06-10",
     "nationalTeam": false,
-    "phone": "+265 888 200 004",
     "email": null
   },
   {
     "id": "PLY-0010",
     "firstName": "Grace",
     "lastName": "Mhango",
-    "dateOfBirth": "2001-01-18",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Kasungu",
@@ -166,14 +147,12 @@
     "status": "Active",
     "registrationDate": "2018-03-05",
     "nationalTeam": true,
-    "phone": "+265 999 200 005",
     "email": null
   },
   {
     "id": "PLY-0011",
     "firstName": "Golden",
     "lastName": "Gunde",
-    "dateOfBirth": "1993-04-12",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -183,14 +162,12 @@
     "status": "Active",
     "registrationDate": "2011-02-28",
     "nationalTeam": true,
-    "phone": "+265 999 300 001",
     "email": null
   },
   {
     "id": "PLY-0012",
     "firstName": "Tsepang",
     "lastName": "Chakwera",
-    "dateOfBirth": "1997-09-05",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -200,14 +177,12 @@
     "status": "Active",
     "registrationDate": "2014-07-15",
     "nationalTeam": true,
-    "phone": "+265 888 300 002",
     "email": null
   },
   {
     "id": "PLY-0013",
     "firstName": "Isaac",
     "lastName": "Mpofu",
-    "dateOfBirth": "1995-12-20",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -217,14 +192,12 @@
     "status": "Active",
     "registrationDate": "2013-05-22",
     "nationalTeam": true,
-    "phone": "+265 999 300 003",
     "email": null
   },
   {
     "id": "PLY-0014",
     "firstName": "Blessings",
     "lastName": "Phiri",
-    "dateOfBirth": "1999-06-08",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -234,14 +207,12 @@
     "status": "Active",
     "registrationDate": "2016-09-01",
     "nationalTeam": false,
-    "phone": "+265 888 300 004",
     "email": null
   },
   {
     "id": "PLY-0015",
     "firstName": "Chikondi",
     "lastName": "Banda",
-    "dateOfBirth": "2000-03-17",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mangochi",
@@ -251,14 +222,12 @@
     "status": "Active",
     "registrationDate": "2017-11-12",
     "nationalTeam": true,
-    "phone": "+265 999 300 005",
     "email": null
   },
   {
     "id": "PLY-0016",
     "firstName": "Michael",
     "lastName": "Chisale",
-    "dateOfBirth": "1994-08-14",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -268,14 +237,12 @@
     "status": "Active",
     "registrationDate": "2012-04-18",
     "nationalTeam": true,
-    "phone": "+265 999 400 001",
     "email": null
   },
   {
     "id": "PLY-0017",
     "firstName": "Loveness",
     "lastName": "Tembo",
-    "dateOfBirth": "1996-01-22",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -285,14 +252,12 @@
     "status": "Active",
     "registrationDate": "2013-10-05",
     "nationalTeam": true,
-    "phone": "+265 888 400 002",
     "email": null
   },
   {
     "id": "PLY-0018",
     "firstName": "Gift",
     "lastName": "Mwale",
-    "dateOfBirth": "1998-05-30",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -302,14 +267,12 @@
     "status": "Active",
     "registrationDate": "2015-02-28",
     "nationalTeam": false,
-    "phone": "+265 999 400 003",
     "email": null
   },
   {
     "id": "PLY-0019",
     "firstName": "Thokozani",
     "lastName": "Phiri",
-    "dateOfBirth": "2001-09-11",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -319,14 +282,12 @@
     "status": "Active",
     "registrationDate": "2018-07-20",
     "nationalTeam": true,
-    "phone": "+265 888 400 004",
     "email": null
   },
   {
     "id": "PLY-0020",
     "firstName": "Brian",
     "lastName": "Kamanga",
-    "dateOfBirth": "1992-12-03",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Kasungu",
@@ -336,14 +297,12 @@
     "status": "Active",
     "registrationDate": "2010-11-15",
     "nationalTeam": true,
-    "phone": "+265 999 400 005",
     "email": null
   },
   {
     "id": "PLY-0021",
     "firstName": "Esther",
     "lastName": "Chirwa",
-    "dateOfBirth": "1995-06-19",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -353,14 +312,12 @@
     "status": "Active",
     "registrationDate": "2012-08-10",
     "nationalTeam": true,
-    "phone": "+265 999 500 001",
     "email": null
   },
   {
     "id": "PLY-0022",
     "firstName": "John",
     "lastName": "Banda",
-    "dateOfBirth": "1993-10-07",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -370,14 +327,12 @@
     "status": "Active",
     "registrationDate": "2011-03-22",
     "nationalTeam": true,
-    "phone": "+265 888 500 002",
     "email": null
   },
   {
     "id": "PLY-0023",
     "firstName": "Mercy",
     "lastName": "Phiri",
-    "dateOfBirth": "1999-02-28",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -387,14 +342,12 @@
     "status": "Active",
     "registrationDate": "2016-05-14",
     "nationalTeam": false,
-    "phone": "+265 999 500 003",
     "email": null
   },
   {
     "id": "PLY-0024",
     "firstName": "David",
     "lastName": "Tembo",
-    "dateOfBirth": "1997-07-15",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -404,14 +357,12 @@
     "status": "Active",
     "registrationDate": "2014-09-30",
     "nationalTeam": true,
-    "phone": "+265 888 500 004",
     "email": null
   },
   {
     "id": "PLY-0025",
     "firstName": "Agnes",
     "lastName": "Mwale",
-    "dateOfBirth": "2000-11-04",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Mangochi",
@@ -421,14 +372,12 @@
     "status": "Active",
     "registrationDate": "2017-12-01",
     "nationalTeam": true,
-    "phone": "+265 999 500 005",
     "email": null
   },
   {
     "id": "PLY-0026",
     "firstName": "Isaac",
     "lastName": "Chimphonda",
-    "dateOfBirth": "1991-04-25",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -438,14 +387,12 @@
     "status": "Active",
     "registrationDate": "2009-06-18",
     "nationalTeam": true,
-    "phone": "+265 999 600 001",
     "email": null
   },
   {
     "id": "PLY-0027",
     "firstName": "Precious",
     "lastName": "Boxer",
-    "dateOfBirth": "1994-09-12",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -455,14 +402,12 @@
     "status": "Active",
     "registrationDate": "2012-01-20",
     "nationalTeam": true,
-    "phone": "+265 888 600 002",
     "email": null
   },
   {
     "id": "PLY-0028",
     "firstName": "Faith",
     "lastName": "Chisale",
-    "dateOfBirth": "1998-03-08",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -472,14 +417,12 @@
     "status": "Active",
     "registrationDate": "2015-08-05",
     "nationalTeam": true,
-    "phone": "+265 999 600 003",
     "email": null
   },
   {
     "id": "PLY-0029",
     "firstName": "Sami",
     "lastName": "Sohail",
-    "dateOfBirth": "2001-10-15",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -489,14 +432,12 @@
     "status": "Active",
     "registrationDate": "2017-04-12",
     "nationalTeam": true,
-    "phone": "+265 999 700 001",
     "email": null
   },
   {
     "id": "PLY-0030",
     "firstName": "Moazzam",
     "lastName": "Baig",
-    "dateOfBirth": "1996-05-22",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -506,14 +447,12 @@
     "status": "Active",
     "registrationDate": "2014-02-28",
     "nationalTeam": true,
-    "phone": "+265 888 700 002",
     "email": null
   },
   {
     "id": "PLY-0031",
     "firstName": "Donnex",
     "lastName": "Kansonkho",
-    "dateOfBirth": "1993-07-30",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -523,14 +462,12 @@
     "status": "Active",
     "registrationDate": "2011-09-10",
     "nationalTeam": true,
-    "phone": "+265 999 700 003",
     "email": null
   },
   {
     "id": "PLY-0032",
     "firstName": "Andrew",
     "lastName": "Baig",
-    "dateOfBirth": "1999-12-05",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -540,14 +477,12 @@
     "status": "Active",
     "registrationDate": "2016-06-18",
     "nationalTeam": false,
-    "phone": "+265 888 700 004",
     "email": null
   },
   {
     "id": "PLY-0033",
     "firstName": "Joseph",
     "lastName": "Nkhoma",
-    "dateOfBirth": "1988-01-14",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -557,14 +492,12 @@
     "status": "Active",
     "registrationDate": "2005-03-20",
     "nationalTeam": true,
-    "phone": "+265 999 800 001",
     "email": "j.nkhoma@chess.mw"
   },
   {
     "id": "PLY-0034",
     "firstName": "Alice",
     "lastName": "Mwale",
-    "dateOfBirth": "1995-08-09",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -574,14 +507,12 @@
     "status": "Active",
     "registrationDate": "2012-11-15",
     "nationalTeam": true,
-    "phone": "+265 888 800 002",
     "email": null
   },
   {
     "id": "PLY-0035",
     "firstName": "Chisomo",
     "lastName": "Phiri",
-    "dateOfBirth": "2002-04-18",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -591,14 +522,12 @@
     "status": "Active",
     "registrationDate": "2018-01-22",
     "nationalTeam": true,
-    "phone": "+265 999 800 003",
     "email": null
   },
   {
     "id": "PLY-0036",
     "firstName": "Sarah",
     "lastName": "Chirwa",
-    "dateOfBirth": "1997-06-25",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -608,14 +537,12 @@
     "status": "Active",
     "registrationDate": "2013-05-10",
     "nationalTeam": true,
-    "phone": "+265 999 900 001",
     "email": null
   },
   {
     "id": "PLY-0037",
     "firstName": "Peter",
     "lastName": "Banda",
-    "dateOfBirth": "1994-11-03",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -625,14 +552,12 @@
     "status": "Active",
     "registrationDate": "2011-08-28",
     "nationalTeam": true,
-    "phone": "+265 888 900 002",
     "email": null
   },
   {
     "id": "PLY-0038",
     "firstName": "Stanislaus",
     "lastName": "Phiri",
-    "dateOfBirth": "1990-02-17",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Salima",
@@ -642,14 +567,12 @@
     "status": "Active",
     "registrationDate": "2008-04-05",
     "nationalTeam": true,
-    "phone": "+265 999 010 001",
     "email": null
   },
   {
     "id": "PLY-0039",
     "firstName": "Chitty",
     "lastName": "Nkhwazi",
-    "dateOfBirth": "1996-09-28",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -659,14 +582,12 @@
     "status": "Active",
     "registrationDate": "2013-07-12",
     "nationalTeam": true,
-    "phone": "+265 888 010 002",
     "email": null
   },
   {
     "id": "PLY-0040",
     "firstName": "Henry",
     "lastName": "Mzonda",
-    "dateOfBirth": "1992-12-11",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -676,14 +597,12 @@
     "status": "Active",
     "registrationDate": "2010-09-20",
     "nationalTeam": true,
-    "phone": "+265 999 011 001",
     "email": null
   },
   {
     "id": "PLY-0041",
     "firstName": "Linda",
     "lastName": "Tembo",
-    "dateOfBirth": "1998-05-06",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -693,14 +612,12 @@
     "status": "Active",
     "registrationDate": "2015-02-15",
     "nationalTeam": true,
-    "phone": "+265 888 011 002",
     "email": null
   },
   {
     "id": "PLY-0042",
     "firstName": "Owen",
     "lastName": "Mfune",
-    "dateOfBirth": "1989-07-22",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -710,14 +627,12 @@
     "status": "Active",
     "registrationDate": "2007-11-08",
     "nationalTeam": true,
-    "phone": "+265 999 012 001",
     "email": null
   },
   {
     "id": "PLY-0043",
     "firstName": "Ruth",
     "lastName": "Phiri",
-    "dateOfBirth": "1997-03-14",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -727,14 +642,12 @@
     "status": "Active",
     "registrationDate": "2014-06-25",
     "nationalTeam": true,
-    "phone": "+265 888 012 002",
     "email": null
   },
   {
     "id": "PLY-0044",
     "firstName": "Patrick",
     "lastName": "Chisale",
-    "dateOfBirth": "1991-10-30",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -744,14 +657,12 @@
     "status": "Active",
     "registrationDate": "2009-04-12",
     "nationalTeam": true,
-    "phone": "+265 999 013 001",
     "email": null
   },
   {
     "id": "PLY-0045",
     "firstName": "Mary",
     "lastName": "Kamanga",
-    "dateOfBirth": "1996-01-19",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -761,14 +672,12 @@
     "status": "Active",
     "registrationDate": "2013-09-05",
     "nationalTeam": true,
-    "phone": "+265 888 013 002",
     "email": null
   },
   {
     "id": "PLY-0046",
     "firstName": "Gift",
     "lastName": "Mhango",
-    "dateOfBirth": "1995-08-07",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -778,14 +687,12 @@
     "status": "Active",
     "registrationDate": "2012-12-01",
     "nationalTeam": true,
-    "phone": "+265 999 014 001",
     "email": null
   },
   {
     "id": "PLY-0047",
     "firstName": "Esther",
     "lastName": "Banda",
-    "dateOfBirth": "1999-04-21",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Kasungu",
@@ -795,14 +702,12 @@
     "status": "Active",
     "registrationDate": "2016-03-18",
     "nationalTeam": true,
-    "phone": "+265 888 014 002",
     "email": null
   },
   {
     "id": "PLY-0048",
     "firstName": "Samuel",
     "lastName": "Chirwa",
-    "dateOfBirth": "1993-11-16",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -812,14 +717,12 @@
     "status": "Active",
     "registrationDate": "2011-05-22",
     "nationalTeam": true,
-    "phone": "+265 999 015 001",
     "email": null
   },
   {
     "id": "PLY-0049",
     "firstName": "Agnes",
     "lastName": "Mwale",
-    "dateOfBirth": "1997-02-09",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -829,14 +732,12 @@
     "status": "Active",
     "registrationDate": "2014-08-14",
     "nationalTeam": true,
-    "phone": "+265 888 015 002",
     "email": null
   },
   {
     "id": "PLY-0050",
     "firstName": "George",
     "lastName": "Phiri",
-    "dateOfBirth": "1994-06-28",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -846,14 +747,12 @@
     "status": "Active",
     "registrationDate": "2012-10-30",
     "nationalTeam": true,
-    "phone": "+265 999 016 001",
     "email": null
   },
   {
     "id": "PLY-0051",
     "firstName": "Faith",
     "lastName": "Tembo",
-    "dateOfBirth": "1998-12-12",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -863,14 +762,12 @@
     "status": "Active",
     "registrationDate": "2015-04-08",
     "nationalTeam": true,
-    "phone": "+265 888 016 002",
     "email": null
   },
   {
     "id": "PLY-0052",
     "firstName": "Charles",
     "lastName": "Banda",
-    "dateOfBirth": "1990-09-03",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -880,14 +777,12 @@
     "status": "Active",
     "registrationDate": "2008-07-15",
     "nationalTeam": true,
-    "phone": "+265 999 017 001",
     "email": null
   },
   {
     "id": "PLY-0053",
     "firstName": "Joyce",
     "lastName": "Kamanga",
-    "dateOfBirth": "1995-01-27",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -897,14 +792,12 @@
     "status": "Active",
     "registrationDate": "2012-12-20",
     "nationalTeam": true,
-    "phone": "+265 888 017 002",
     "email": null
   },
   {
     "id": "PLY-0054",
     "firstName": "Thomas",
     "lastName": "Mwale",
-    "dateOfBirth": "1987-05-14",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -914,14 +807,12 @@
     "status": "Active",
     "registrationDate": "2006-03-01",
     "nationalTeam": true,
-    "phone": "+265 999 018 001",
     "email": null
   },
   {
     "id": "PLY-0055",
     "firstName": "Grace",
     "lastName": "Nkhoma",
-    "dateOfBirth": "1992-08-22",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -931,14 +822,12 @@
     "status": "Active",
     "registrationDate": "2010-06-18",
     "nationalTeam": true,
-    "phone": "+265 888 018 002",
     "email": null
   },
   {
     "id": "PLY-0056",
     "firstName": "Paul",
     "lastName": "Chirwa",
-    "dateOfBirth": "1994-03-09",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -948,14 +837,12 @@
     "status": "Active",
     "registrationDate": "2011-09-25",
     "nationalTeam": true,
-    "phone": "+265 999 019 001",
     "email": null
   },
   {
     "id": "PLY-0057",
     "firstName": "Mercy",
     "lastName": "Banda",
-    "dateOfBirth": "1999-07-16",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Mzuzu",
@@ -965,14 +852,12 @@
     "status": "Active",
     "registrationDate": "2016-02-10",
     "nationalTeam": true,
-    "phone": "+265 888 019 002",
     "email": null
   },
   {
     "id": "PLY-0058",
     "firstName": "Andrew",
     "lastName": "Chisale",
-    "dateOfBirth": "1991-11-28",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -982,14 +867,12 @@
     "status": "Active",
     "registrationDate": "2009-08-14",
     "nationalTeam": true,
-    "phone": "+265 999 020 001",
     "email": null
   },
   {
     "id": "PLY-0059",
     "firstName": "Susan",
     "lastName": "Phiri",
-    "dateOfBirth": "1996-04-04",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -999,14 +882,12 @@
     "status": "Active",
     "registrationDate": "2013-11-22",
     "nationalTeam": true,
-    "phone": "+265 888 020 002",
     "email": null
   },
   {
     "id": "PLY-0060",
     "firstName": "Richard",
     "lastName": "Banda",
-    "dateOfBirth": "1985-12-19",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -1016,14 +897,12 @@
     "status": "Active",
     "registrationDate": "2003-05-30",
     "nationalTeam": true,
-    "phone": "+265 999 021 001",
     "email": null
   },
   {
     "id": "PLY-0061",
     "firstName": "Helen",
     "lastName": "Tembo",
-    "dateOfBirth": "1993-06-11",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -1033,14 +912,12 @@
     "status": "Active",
     "registrationDate": "2011-02-14",
     "nationalTeam": true,
-    "phone": "+265 888 021 002",
     "email": null
   },
   {
     "id": "PLY-0062",
     "firstName": "Joseph",
     "lastName": "Chirwa",
-    "dateOfBirth": "2005-09-08",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -1050,14 +927,12 @@
     "status": "Active",
     "registrationDate": "2020-01-15",
     "nationalTeam": false,
-    "phone": "+265 999 022 001",
     "email": null
   },
   {
     "id": "PLY-0063",
     "firstName": "Linda",
     "lastName": "Mwale",
-    "dateOfBirth": "2006-02-25",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -1067,14 +942,12 @@
     "status": "Active",
     "registrationDate": "2021-03-10",
     "nationalTeam": false,
-    "phone": "+265 888 022 002",
     "email": null
   },
   {
     "id": "PLY-0064",
     "firstName": "Kelvin",
     "lastName": "Phiri",
-    "dateOfBirth": "1988-10-05",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -1084,14 +957,12 @@
     "status": "Active",
     "registrationDate": "2006-07-22",
     "nationalTeam": true,
-    "phone": "+265 999 023 001",
     "email": null
   },
   {
     "id": "PLY-0065",
     "firstName": "Daniel",
     "lastName": "Kamanga",
-    "dateOfBirth": "1992-03-18",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -1101,14 +972,12 @@
     "status": "Active",
     "registrationDate": "2010-10-08",
     "nationalTeam": true,
-    "phone": "+265 999 024 001",
     "email": null
   },
   {
     "id": "PLY-0066",
     "firstName": "Patricia",
     "lastName": "Mwale",
-    "dateOfBirth": "1997-08-29",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Zomba",
@@ -1118,14 +987,12 @@
     "status": "Active",
     "registrationDate": "2014-05-17",
     "nationalTeam": true,
-    "phone": "+265 888 024 002",
     "email": null
   },
   {
     "id": "PLY-0067",
     "firstName": "Frank",
     "lastName": "Tembo",
-    "dateOfBirth": "1990-01-12",
     "gender": "Male",
     "nationality": "Malawian",
     "district": "Blantyre",
@@ -1135,14 +1002,12 @@
     "status": "Active",
     "registrationDate": "2008-11-03",
     "nationalTeam": true,
-    "phone": "+265 999 025 001",
     "email": null
   },
   {
     "id": "PLY-0068",
     "firstName": "Naomi",
     "lastName": "Phiri",
-    "dateOfBirth": "1995-05-21",
     "gender": "Female",
     "nationality": "Malawian",
     "district": "Lilongwe",
@@ -1152,7 +1017,6 @@
     "status": "Active",
     "registrationDate": "2012-09-14",
     "nationalTeam": true,
-    "phone": "+265 888 025 002",
     "email": null
   }
 ]

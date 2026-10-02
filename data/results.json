@@ -50,14 +50,14 @@
   {
     "id": "RES-005",
     "eventId": "EVT-005",
-    "playerId": "PLY-0021",
     "category": "Women's Volleyball - Final Ranking",
     "position": 1,
     "medal": "Gold",
     "performance": "Team Champion",
     "unit": null,
     "notes": "National team member",
-    "verified": true
+    "verified": true,
+    "teamName": "Demonstration team"
   },
   {
     "id": "RES-006",
