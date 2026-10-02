@@ -22,11 +22,34 @@ async function loadData() {
     state.events = await eventsRes.json();
     state.results = await resultsRes.json();
 
+    const sample = {
+      associations: state.associations.slice(),
+      players: state.players.slice(),
+      events: state.events.slice(),
+      results: state.results.slice()
+    };
     if (window.MNCS_DB) {
       const {data,error} = await window.MNCS_DB.from('registry').select('*');
       if(error) throw error;
-      ['associations','players','events','results'].forEach(k => state[k] = data.filter(r=>r.collection===k).map(r=>r.payload));
-      document.getElementById('data-banner').textContent = window.MNCS_DB.demo?'DEMO ONLY · data in this page session; no live accounts or records':'Connected registry · sourced candidates and registered associations remain subject to MNCS verification';
+      const live = {};
+      ['associations','players','events','results'].forEach(k => {
+        live[k] = data.filter(r=>r.collection===k).map(r=>r.payload);
+        if (live[k].length) state[k] = live[k];
+      });
+      const ids = new Set((live.associations.length ? live.associations : sample.associations).map(a => a.id));
+      if (!live.players.length && sample.players.some(p => ids.has(p.associationId))) state.players = sample.players.filter(p => ids.has(p.associationId));
+      if (!live.events.length && sample.events.some(e => ids.has(e.associationId))) state.events = sample.events.filter(e => ids.has(e.associationId));
+      if (!live.results.length && state.events.length && state.players.length) {
+        const eventIds = new Set(state.events.map(e => e.id));
+        const playerIds = new Set(state.players.map(p => p.id));
+        state.results = sample.results.filter(r => eventIds.has(r.eventId) && playerIds.has(r.playerId));
+      }
+      const banner = document.getElementById('data-banner');
+      if (window.MNCS_DB.demo) banner.textContent = 'Demo only · data in this page session; no live accounts or records';
+      else if (!live.players.length) banner.textContent = 'Connected registry · association candidates are subject to MNCS verification. No official athlete or result rows are published yet.';
+      else banner.textContent = 'Connected registry · sourced candidates and registered associations remain subject to MNCS verification';
+    } else {
+      document.getElementById('data-banner').textContent = 'Sample registry · unverified names, dates and results';
     }
     // Public data must not contain private athlete or official contact details.
     state.players.forEach(p=>{delete p.phone;delete p.dateOfBirth;});
@@ -142,7 +165,7 @@ function renderDashboard(q) {
         </div>
         ${p.nationalTeam ? '<span class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">NT</span>' : ''}
       </div>`;
-  }).join('') || '<p class="text-sm text-slate-400">No players match.</p>';
+  }).join('') || '<p class="text-sm text-slate-400">No athletes published yet. Association secretaries register athletes from Workspace after an account is issued.</p>';
 
   // Upcoming / Ongoing events
   const upcoming = state.events
@@ -160,7 +183,7 @@ function renderDashboard(q) {
         </div>
         <p class="text-xs text-slate-500 mt-1">${assoc.shortName} • ${e.startDate}</p>
       </div>`;
-  }).join('') || '<p class="text-sm text-slate-400">No upcoming events.</p>';
+  }).join('') || '<p class="text-sm text-slate-400">No upcoming or ongoing events.</p>';
 }
 
 function renderAssociations(q) {

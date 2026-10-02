@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MNCS Players & Associations Database</title>
-  <meta name="description" content="Malawi National Council of Sports - Players, Associations, Events & Results Registry" />
+  <title>MNCS Registry v0.8 · Players & Associations</title>
+  <meta name="description" content="Malawi National Council of Sports registry of associations, athletes, events, results and awards." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,34 +17,38 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-lg">MN</div>
+          <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-bold text-sm text-green-800 ring-2 ring-white/40">MN</div>
           <div>
-            <h1 class="text-lg font-bold leading-tight">MNCS Registry</h1>
-            <p class="text-xs text-green-100 hidden sm:block">Players • Associations • Events • Results</p>
+            <h1 class="text-lg font-bold leading-tight tracking-tight">MNCS Registry</h1>
+            <p class="text-xs text-green-100 hidden sm:block">National sports associations · athletes · events · awards</p>
           </div>
+          <span class="hidden sm:inline-flex text-[11px] font-semibold tracking-wide uppercase bg-white/15 border border-white/25 rounded-full px-2 py-0.5">v0.8</span>
         </div>
-        <nav class="hidden md:flex items-center gap-1">
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Primary">
           <button data-view="dashboard" class="nav-btn active px-3 py-2 rounded-md text-sm font-medium">Dashboard</button>
           <button data-view="associations" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Associations</button>
           <button data-view="players" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Players</button>
           <button data-view="events" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Events</button>
           <button data-view="results" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Results</button>
-        <button data-view="awards" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Awards</button><button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button></nav>
-        <button id="mobile-menu-btn" aria-label="Open navigation" class="md:hidden p-2 rounded-md hover:bg-white/10">
+          <button data-view="awards" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Awards</button>
+          <button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button>
+        </nav>
+        <button id="mobile-menu-btn" aria-label="Open navigation" class="lg:hidden p-2 rounded-md hover:bg-white/10">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
     <!-- Mobile nav -->
-    <div id="mobile-nav" class="hidden md:hidden bg-green-900/95 px-4 pb-3">
+    <div id="mobile-nav" class="hidden lg:hidden bg-green-900/95 px-4 pb-3">
       <button data-view="dashboard" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Dashboard</button>
       <button data-view="associations" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Associations</button>
       <button data-view="players" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Players</button>
       <button data-view="events" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Events</button>
-      <button data-view="awards" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Awards</button><button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
       <button data-view="results" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Results</button>
+      <button data-view="awards" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Awards</button>
+      <button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
     </div>
-<div id="data-banner" class="px-4 py-2 bg-amber-100 text-amber-900 text-sm">Demonstration data · unverified names, dates and results</div></header>
+<div id="data-banner" class="px-4 py-2 bg-amber-50 text-amber-950 text-sm border-b border-amber-200">Loading registry…</div></header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <!-- Search bar (shared) -->
@@ -91,12 +95,11 @@
       </div>
 
       <div class="mt-6 bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-        <h2 class="font-semibold text-lg mb-3">About this Registry</h2>
+        <h2 class="font-semibold text-lg mb-3">About this registry</h2>
         <p class="text-sm text-slate-600 leading-relaxed">
-          First draft of the Malawi National Council of Sports (MNCS) central players and associations database. 
-          It captures affiliated national sports associations, registered athletes, events and competition results. 
-          Sample data is included for demonstration. Built for deployment on Netlify as a static site.
+          Public register for the Malawi National Council of Sports. Association candidates drawn from the Malawi Olympic Committee directory remain subject to MNCS verification. Athlete and result lists stay empty until matching live records exist.
         </p>
+        <p class="text-xs text-slate-500 mt-3">v0.8 · workspace, awards screening, reporting and account administration are unchanged from v0.7.</p>
       </div>
     </div>
 
@@ -167,8 +170,8 @@
   </div>
 
   <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-    <p>Malawi National Council of Sports (MNCS) — Association Management v0.7</p>
-    <p class="mt-1"><a href="demo.html">Open isolated workflow demo</a> • Pseudo logins use 1234</p>
+    <p>Malawi National Council of Sports — Registry v0.8</p>
+    <p class="mt-1">Verification required before affiliation or funding decisions · <a class="underline" href="demo.html">Isolated workflow demo</a></p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
