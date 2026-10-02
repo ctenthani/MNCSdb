@@ -3,37 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MNCS Registry v0.8 · Players & Associations</title>
-  <meta name="description" content="Malawi National Council of Sports registry of associations, athletes, events, results and awards." />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>MNCS Registry · Malawi sport, connected</title>
+  <meta name="description" content="Malawi National Council of Sports - Players, Associations, Events & Results Registry" />
+  <link rel="stylesheet" href="css/tailwind.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/styles.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <!-- Header -->
-  <header class="bg-gradient-to-r from-green-800 via-green-700 to-red-700 text-white shadow-lg sticky top-0 z-50">
+  <header class="site-header text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center font-bold text-sm text-green-800 ring-2 ring-white/40">MN</div>
+          <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-lg">MN</div>
           <div>
-            <h1 class="text-lg font-bold leading-tight tracking-tight">MNCS Registry</h1>
-            <p class="text-xs text-green-100 hidden sm:block">National sports associations · athletes · events · awards</p>
+            <h1 class="text-lg font-bold leading-tight">MNCS Registry <span class="registry-version">V0.8</span></h1>
+            <p class="text-xs text-green-100 hidden sm:block">Malawi sport, connected</p>
           </div>
-          <span class="hidden sm:inline-flex text-[11px] font-semibold tracking-wide uppercase bg-white/15 border border-white/25 rounded-full px-2 py-0.5">v0.8</span>
         </div>
-        <nav class="hidden lg:flex items-center gap-1" aria-label="Primary">
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
           <button data-view="dashboard" class="nav-btn active px-3 py-2 rounded-md text-sm font-medium">Dashboard</button>
           <button data-view="associations" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Associations</button>
           <button data-view="players" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Players</button>
           <button data-view="events" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Events</button>
           <button data-view="results" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Results</button>
-          <button data-view="awards" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Awards</button>
-          <button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button>
-        </nav>
-        <button id="mobile-menu-btn" aria-label="Open navigation" class="lg:hidden p-2 rounded-md hover:bg-white/10">
+        <button data-view="awards" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Awards</button><button data-view="portal" class="nav-btn px-3 py-2 rounded-md text-sm font-medium">Workspace</button></nav>
+        <button id="mobile-menu-btn" aria-label="Open navigation" aria-controls="mobile-nav" aria-expanded="false" class="lg:hidden p-2 rounded-md hover:bg-white/10">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
@@ -44,17 +40,16 @@
       <button data-view="associations" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Associations</button>
       <button data-view="players" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Players</button>
       <button data-view="events" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Events</button>
+      <button data-view="awards" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Awards</button><button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
       <button data-view="results" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Results</button>
-      <button data-view="awards" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Awards</button>
-      <button data-view="portal" class="nav-btn block w-full text-left px-3 py-2 rounded-md text-sm">Workspace</button>
     </div>
-<div id="data-banner" class="px-4 py-2 bg-amber-50 text-amber-950 text-sm border-b border-amber-200">Loading registry…</div></header>
+</header><div id="data-banner" class="data-status" role="status" aria-live="polite">Loading registry…</div>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main id="main-content" tabindex="-1" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <!-- Search bar (shared) -->
-    <div class="mb-6">
+    <div id="search-toolbar" class="mb-6">
       <div class="relative">
-        <input id="global-search" type="search" placeholder="Search players, associations, events..." 
+        <input aria-label="Search the public registry" id="global-search" type="search" placeholder="Search associations, athletes and events…"
                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-sm" />
         <svg class="absolute left-3 top-3 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </div>
@@ -63,14 +58,14 @@
 <section id="view-portal" class="view hidden"><h2 class="text-xl font-bold mb-4">Association submissions and MNCS review</h2><p id="portal-notice" role="status" aria-live="polite"></p><div id="portal-content"></div></section>
 <section id="view-awards" class="view hidden"><h2 class="text-xl font-bold mb-4">Malawi Sport Awards</h2><div id="awards-content"></div></section>
     <!-- Views -->
-    <div id="view-dashboard" class="view">
+    <div id="view-dashboard" class="view"><section class="registry-hero"><div><p class="eyebrow">THE NATIONAL SPORTS REGISTER</p><h2>One place.<br>Every sporting story.</h2><p>Explore Malawi’s associations, athletes and competitions. Follow the records that connect our sporting community.</p><div class="hero-actions"><button type="button" id="explore-directory">Explore associations <span aria-hidden="true">↗</span></button><button type="button" id="open-workspace">Association workspace</button></div></div><aside class="hero-aside"><div class="hero-mark" aria-hidden="true">MW<span>SPORT</span></div><p>Built on verified records.<br>Driven by our associations.</p><span class="edition-tag">REGISTRY / V0.8</span></aside></section>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <p class="text-sm text-slate-500">Associations</p>
           <p id="stat-associations" class="text-3xl font-bold text-green-800 mt-1">—</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-          <p class="text-sm text-slate-500">Registered Players</p>
+          <p class="text-sm text-slate-500">Athlete records</p>
           <p id="stat-players" class="text-3xl font-bold text-green-800 mt-1">—</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
@@ -85,7 +80,7 @@
 
       <div class="grid md:grid-cols-2 gap-6">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-          <h2 class="font-semibold text-lg mb-4">Recent / Featured Players</h2>
+          <h2 class="font-semibold text-lg mb-4">Athletes in the registry</h2>
           <div id="featured-players" class="space-y-3"></div>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
@@ -94,26 +89,13 @@
         </div>
       </div>
 
-      <div class="mt-6 bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-        <h2 class="font-semibold text-lg mb-3">About this registry</h2>
-        <p class="text-sm text-slate-600 leading-relaxed">
-          Public register for the Malawi National Council of Sports. Association candidates drawn from the Malawi Olympic Committee directory remain subject to MNCS verification. Athlete and result lists stay empty until matching live records exist.
-        </p>
-        <p class="text-xs text-slate-500 mt-3">v0.8 · workspace, awards screening, reporting and account administration are unchanged from v0.7.</p>
-      </div>
+      <section class="registry-trust"><div><p class="eyebrow">KNOW YOUR DATA</p><h2>Transparency at every step</h2><p>Source listings help discover associations. MNCS review determines the status of submitted records. A sourced entry alone does not confirm current affiliation.</p></div><div class="trust-metrics"><div><strong id="verified-associations">0</strong><span>Profiles approved through review</span></div><div><strong id="pending-associations">0</strong><span>Profiles awaiting verification</span></div></div></section><p id="registry-updated" class="refresh-label">Waiting for connection</p>
+
     </div>
 
     <div id="view-associations" class="view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <h2 class="text-xl font-bold">Sports Associations</h2>
-        <select id="assoc-status-filter" class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white">
-          <option value="">All statuses</option>
-          <option value="Active">Active</option>
-          <option value="Suspended">Suspended</option>
-          <option value="Under Review">Under Review</option>
-        </select>
-      </div>
-      <div id="associations-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div class="directory-heading"><div><p class="eyebrow">DISCOVER MALAWI SPORT</p><h2>Association directory</h2><p>Search, filter and explore the organisations behind every discipline.</p></div><button type="button" id="export-associations" class="secondary-button">Export directory CSV</button></div><div class="directory-filters"><label>Sport<select id="assoc-sport-filter"><option value="">All sports</option></select></label><label>Registration status<select id="assoc-status-filter"><option value="">All statuses</option><option>Active</option><option>Suspended</option><option>Under Review</option></select></label><label>Profile verification<select id="assoc-verification-filter"><option value="">All records</option><option value="approved">Approved profile</option><option value="pending">Awaiting verification</option></select></label><label>Sort by<select id="assoc-sort"><option value="name">Name A–Z</option><option value="sport">Sport A–Z</option></select></label></div><p id="association-count" class="directory-count" role="status"></p>
+      <div id="associations-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div><nav id="association-pagination" class="directory-pagination" aria-label="Association directory pages"></nav>
     </div>
 
     <div id="view-players" class="view hidden">
@@ -157,7 +139,7 @@
   </main>
 
   <!-- Detail Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between p-4 border-b">
         <h3 id="modal-title" class="font-semibold text-lg"></h3>
@@ -170,11 +152,11 @@
   </div>
 
   <footer class="border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
-    <p>Malawi National Council of Sports — Registry v0.8</p>
-    <p class="mt-1">Verification required before affiliation or funding decisions · <a class="underline" href="demo.html">Isolated workflow demo</a></p>
+    <p>Malawi National Council of Sports (MNCS) — Registry V0.8</p>
+    <p class="mt-1"><a href="demo.html">Open isolated workflow demo</a> • Pseudo logins use 1234</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+  <script src="js/vendor/supabase.js"></script>
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
   <script src="js/reporting.js"></script>

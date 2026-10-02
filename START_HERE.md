@@ -1,6 +1,9 @@
-# MNCS Registry v0.7 — install the latest package
+# MNCS Registry V0.8 — start here
 
-This ZIP contains all implemented features from v0.2 through v0.7. You do not need
+Read V0.8_RELEASE.md for the current release and deployment steps.
+Read V0.8_TEST_REPORT.md for what was and was not tested.
+
+This ZIP contains all implemented features from v0.2 through V0.8. You do not need
 to deploy earlier ZIPs or run their SQL files individually.
 
 1. Make a backup/export of existing project data before installing.

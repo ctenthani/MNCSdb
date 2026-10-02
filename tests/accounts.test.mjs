@@ -46,3 +46,6 @@ test('admin reset rejects 1234 before calling Auth admin API',async()=>{
   const result=await handler(event({action:'reset-password',user_id:'00000000-0000-4000-8000-000000000001',password:'1234'}));assert.equal(result.statusCode,400);assert(!calls.some(c=>c.method==='PUT'));
  });
 });
+test('read-only service status reports missing variable names without exposing secret values',async()=>{
+ await withMock(()=>undefined,async calls=>{const response=await handler({httpMethod:'GET',headers:{}});assert.equal(response.statusCode,200);assert.equal(JSON.parse(response.body).ready,true);assert(!response.body.includes(env.SUPABASE_SECRET_KEY));assert.equal(calls.length,0);delete process.env.SUPABASE_SECRET_KEY;const missing=await handler({httpMethod:'GET',headers:{}});assert.equal(missing.statusCode,503);assert(JSON.parse(missing.body).missing.includes('SUPABASE_SECRET_KEY'));});
+});

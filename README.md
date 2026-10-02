@@ -1,3 +1,7 @@
+## Current release: V0.8
+
+See V0.8_RELEASE.md and V0.8_TEST_REPORT.md. This release includes the polished directory, local assets, live-data separation and account service diagnostics.
+
 # MNCS Players & Associations Database
 
 **First draft** of a central registry for the **Malawi National Council of Sports (MNCS)**.

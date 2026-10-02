@@ -9,73 +9,41 @@ const state = {
   searchQuery: ''
 };
 
+const registryCollections=['associations','players','events','results'];
 async function loadData() {
-  try {
-    const [assocRes, playersRes, eventsRes, resultsRes] = await Promise.all([
-      fetch('data/associations.json'),
-      fetch('data/players.json'),
-      fetch('data/events.json'),
-      fetch('data/results.json')
-    ]);
-    state.associations = await assocRes.json();
-    state.players = await playersRes.json();
-    state.events = await eventsRes.json();
-    state.results = await resultsRes.json();
-
-    const sample = {
-      associations: state.associations.slice(),
-      players: state.players.slice(),
-      events: state.events.slice(),
-      results: state.results.slice()
-    };
-    if (window.MNCS_DB) {
-      const {data,error} = await window.MNCS_DB.from('registry').select('*');
-      if(error) throw error;
-      const live = {};
-      ['associations','players','events','results'].forEach(k => {
-        live[k] = data.filter(r=>r.collection===k).map(r=>r.payload);
-        if (live[k].length) state[k] = live[k];
-      });
-      const ids = new Set((live.associations.length ? live.associations : sample.associations).map(a => a.id));
-      if (!live.players.length && sample.players.some(p => ids.has(p.associationId))) state.players = sample.players.filter(p => ids.has(p.associationId));
-      if (!live.events.length && sample.events.some(e => ids.has(e.associationId))) state.events = sample.events.filter(e => ids.has(e.associationId));
-      if (!live.results.length && state.events.length && state.players.length) {
-        const eventIds = new Set(state.events.map(e => e.id));
-        const playerIds = new Set(state.players.map(p => p.id));
-        state.results = sample.results.filter(r => eventIds.has(r.eventId) && playerIds.has(r.playerId));
-      }
-      const banner = document.getElementById('data-banner');
-      if (window.MNCS_DB.demo) banner.textContent = 'Demo only · data in this page session; no live accounts or records';
-      else if (!live.players.length) banner.textContent = 'Connected registry · association candidates are subject to MNCS verification. No official athlete or result rows are published yet.';
-      else banner.textContent = 'Connected registry · sourced candidates and registered associations remain subject to MNCS verification';
-    } else {
-      document.getElementById('data-banner').textContent = 'Sample registry · unverified names, dates and results';
-    }
-    // Public data must not contain private athlete or official contact details.
-    state.players.forEach(p=>{delete p.phone;delete p.dateOfBirth;});
-    state.associations.forEach(a=>{delete a.phone;delete a.email;});
-    const today = new Intl.DateTimeFormat('en-CA', {timeZone:'Africa/Blantyre',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-    state.events.forEach(e=>{
-      e.confirmedStatus=e.status;
-      if(!['Cancelled','Postponed'].includes(e.status)) e.status=e.startDate>today?'Upcoming':(e.endDate||e.startDate)<today?'Past':'Ongoing';
-    });
-    // Escape strings before interpolation into HTML.
-    const safe = v => typeof v==='string'?v.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])):v;
-    [state.associations,state.players,state.events,state.results].forEach(rows=>rows.forEach(r=>Object.keys(r).forEach(k=>{r[k]=safe(r[k]);})));
-    // Update player counts
-    state.associations.forEach(a => {
-      a.playerCount = state.players.filter(p => p.associationId === a.id).length;
-    });
-
-    render();
-  } catch (err) {
-    console.error('Failed to load data:', err);
-    document.querySelector('main').innerHTML = `
-      <div class="bg-red-50 border border-red-200 text-red-800 rounded-xl p-6 text-center">
-        <p class="font-semibold">Could not load database files.</p>
-        <p class="text-sm mt-2">Make sure the data/ folder is present and you are serving the site (not opening index.html directly as a file).</p>
-      </div>`;
+ const banner=document.getElementById('data-banner');
+ document.getElementById('registry-load-error')?.remove();
+ banner.textContent='Loading registry…';
+ try {
+  // A configured live project never falls back to demonstration records.
+  const cfg=window.MNCS_CONFIG||{};
+  const db=window.MNCS_DB||(cfg.supabaseUrl&&cfg.supabaseKey?window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey):null);
+  if(db)window.MNCS_DB=db;
+  let next={};
+  if(db){
+   const result=await db.from('registry').select('*');if(result.error)throw result.error;
+   registryCollections.forEach(key=>next[key]=result.data.filter(row=>row.collection===key).map(row=>({...row.payload,id:row.id})));
+   banner.textContent=db.demo?'Isolated demo · fictional accounts; changes reset on reload':'Connected registry · association affiliation remains subject to MNCS verification';
+  }else{
+   const responses=await Promise.all(registryCollections.map(key=>fetch('data/'+key+'.json')));
+   if(responses.some(r=>!r.ok))throw Error('Registry data unavailable');
+   const data=await Promise.all(responses.map(r=>r.json()));registryCollections.forEach((key,i)=>next[key]=data[i]);
+   banner.textContent='Demonstration records · not an official register';
   }
+  next.players.forEach(p=>{delete p.phone;delete p.email;delete p.dateOfBirth;});
+  next.associations.forEach(a=>{delete a.phone;delete a.email;});
+  const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Blantyre',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  next.events.forEach(e=>{e.confirmedStatus=e.status;if(!['Cancelled','Postponed'].includes(e.status))e.status=e.startDate>today?'Upcoming':(e.endDate||e.startDate)<today?'Past':'Ongoing';});
+  const safe=value=>typeof value==='string'?value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])):value;
+  registryCollections.forEach(key=>{next[key].forEach(row=>Object.keys(row).forEach(k=>row[k]=safe(row[k])));state[key]=next[key];});
+  state.associations.forEach(a=>a.playerCount=state.players.filter(p=>p.associationId===a.id).length);
+  state.loadedAt=new Date();render();return true;
+ }catch(error){
+  banner.textContent='Registry connection unavailable · refresh to retry';
+  const panel=document.createElement('div');panel.id='registry-load-error';panel.className='registry-error';panel.setAttribute('role','alert');
+  panel.innerHTML='<strong>We could not refresh the registry.</strong><p>Check your connection and try again. Previously loaded records remain visible; the workspace is still available.</p><button type="button" id="retry-registry">Try again</button>';
+  document.querySelector('main').prepend(panel);document.getElementById('retry-registry').onclick=loadData;return false;
+ }
 }
 
 function getAssociation(id) {
@@ -101,6 +69,10 @@ function switchView(view) {
   });
 
   document.getElementById('mobile-nav').classList.add('hidden');
+  document.getElementById('mobile-menu-btn').setAttribute('aria-expanded','false');
+  document.getElementById('search-toolbar').hidden=['portal','awards'].includes(view);
+  document.querySelectorAll('.nav-btn').forEach(button=>button.setAttribute('aria-current',button.dataset.view===view?'page':'false'));
+  location.hash=view;
   renderCurrentView();
 }
 
@@ -111,18 +83,13 @@ function render() {
   document.getElementById('stat-events').textContent = state.events.length;
   document.getElementById('stat-results').textContent = state.results.length;
 
-  // Populate filters
-  const assocFilter = document.getElementById('player-assoc-filter');
-  if (assocFilter.options.length <= 1) {
-    state.associations
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .forEach(a => {
-        const opt = document.createElement('option');
-        opt.value = a.id;
-        opt.textContent = a.shortName || a.name;
-        assocFilter.appendChild(opt);
-      });
-  }
+  const assocFilter=document.getElementById('player-assoc-filter'),selected=assocFilter.value;
+  assocFilter.innerHTML='<option value="">All associations</option>';
+  [...state.associations].sort((a,b)=>a.name.localeCompare(b.name)).forEach(a=>{const option=document.createElement('option');option.value=a.id;option.textContent=a.name;assocFilter.appendChild(option);});
+  assocFilter.value=selected;
+  document.getElementById('verified-associations').textContent=state.associations.filter(a=>a.verificationStatus==='Approved').length;
+  document.getElementById('pending-associations').textContent=state.associations.filter(a=>a.verificationStatus!=='Approved').length;
+  document.getElementById('registry-updated').textContent=state.loadedAt?'Refreshed '+state.loadedAt.toLocaleTimeString('en-GB',{timeZone:'Africa/Blantyre',hour:'2-digit',minute:'2-digit'})+' CAT':'Waiting for connection';
 
   renderCurrentView();
 }
@@ -155,7 +122,7 @@ function renderDashboard(q) {
   document.getElementById('featured-players').innerHTML = featured.map(p => {
     const assoc = getAssociation(p.associationId);
     return `
-      <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer" onclick="showPlayerDetail('${p.id}')">
+      <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer" data-player="${p.id}" role="button" tabindex="0">
         <div class="w-9 h-9 rounded-full bg-green-100 text-green-800 flex items-center justify-center text-sm font-semibold">
           ${p.firstName[0]}${p.lastName[0]}
         </div>
@@ -165,7 +132,7 @@ function renderDashboard(q) {
         </div>
         ${p.nationalTeam ? '<span class="text-xs bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">NT</span>' : ''}
       </div>`;
-  }).join('') || '<p class="text-sm text-slate-400">No athletes published yet. Association secretaries register athletes from Workspace after an account is issued.</p>';
+  }).join('') || '<p class="text-sm text-slate-400">No players match.</p>';
 
   // Upcoming / Ongoing events
   const upcoming = state.events
@@ -176,45 +143,30 @@ function renderDashboard(q) {
   document.getElementById('upcoming-events').innerHTML = upcoming.map(e => {
     const assoc = getAssociation(e.associationId);
     return `
-      <div class="p-3 rounded-lg border border-slate-100 hover:border-green-200 cursor-pointer" onclick="showEventDetail('${e.id}')">
+      <div class="p-3 rounded-lg border border-slate-100 hover:border-green-200 cursor-pointer" data-event="${e.id}" role="button" tabindex="0">
         <div class="flex items-start justify-between gap-2">
           <p class="font-medium text-sm">${e.name}</p>
           <span class="status-badge status-${e.status}">${e.status}</span>
         </div>
         <p class="text-xs text-slate-500 mt-1">${assoc.shortName} • ${e.startDate}</p>
       </div>`;
-  }).join('') || '<p class="text-sm text-slate-400">No upcoming or ongoing events.</p>';
+  }).join('') || '<p class="text-sm text-slate-400">No upcoming events.</p>';
 }
 
-function renderAssociations(q) {
-  const statusFilter = document.getElementById('assoc-status-filter').value;
-  let list = state.associations;
-
-  if (statusFilter) list = list.filter(a => a.status === statusFilter);
-  if (q) {
-    list = list.filter(a =>
-      a.name.toLowerCase().includes(q) ||
-      (a.shortName && a.shortName.toLowerCase().includes(q)) ||
-      a.sport.toLowerCase().includes(q)
-    );
-  }
-
-  document.getElementById('associations-list').innerHTML = list.map(a => `
-    <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 card-hover cursor-pointer" onclick="showAssociationDetail('${a.id}')">
-      <div class="flex items-start justify-between gap-2">
-        <div>
-          <h3 class="font-semibold text-sm leading-tight">${a.name}</h3>
-          <p class="text-xs text-slate-500 mt-0.5">${a.shortName} • ${a.sport}</p>
-        </div>
-        <span class="status-badge status-${a.status}">${a.status}</span>
-      </div>
-      <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
-        <span>${a.playerCount} players</span>
-        <span>AGM: ${a.lastAGM || '—'}</span>
-      </div>
-      ${a.strategicPlan ? '<p class="mt-2 text-xs text-green-700">✓ Strategic plan submitted</p>' : '<p class="mt-2 text-xs text-amber-600">No strategic plan on file</p>'}
-    </div>
-  `).join('') || '<p class="col-span-full text-center text-slate-400 py-8">No associations found.</p>';
+let associationPage=1;
+function filteredAssociations(q=state.searchQuery.toLowerCase().trim()){
+ const status=document.getElementById('assoc-status-filter').value,sport=document.getElementById('assoc-sport-filter').value,verification=document.getElementById('assoc-verification-filter').value;
+ return state.associations.filter(a=>(!status||a.status===status)&&(!sport||a.sport===sport)&&(!verification||(verification==='approved')===(a.verificationStatus==='Approved'))&&(!q||`${a.name} ${a.shortName||''} ${a.sport||''}`.toLowerCase().includes(q))).sort((a,b)=>document.getElementById('assoc-sort').value==='sport'?a.sport.localeCompare(b.sport)||a.name.localeCompare(b.name):a.name.localeCompare(b.name));
+}
+function renderAssociations(q){
+ const filter=document.getElementById('assoc-sport-filter'),selected=filter.value;filter.innerHTML='<option value="">All sports</option>';
+ [...new Set(state.associations.map(a=>a.sport).filter(Boolean))].sort().forEach(sport=>{const option=document.createElement('option');option.value=sport;option.textContent=sport;filter.appendChild(option);});filter.value=selected;
+ const list=filteredAssociations(q),pages=Math.max(1,Math.ceil(list.length/12));associationPage=Math.min(associationPage,pages);
+ document.getElementById('association-count').textContent=`${list.length} association${list.length===1?'':'s'} found · page ${associationPage} of ${pages}`;
+ document.getElementById('associations-list').innerHTML=list.slice((associationPage-1)*12,associationPage*12).map(a=>`<article class="association-card"><div class="association-card-top"><span class="sport-label">${a.sport||'Sport not recorded'}</span><span class="verification-chip ${a.verificationStatus==='Approved'?'verified':''}">${a.verificationStatus==='Approved'?'Profile approved':'Verification pending'}</span></div><h3>${a.name}</h3><p class="association-code">${a.id} · ${a.shortName||'No abbreviation'}</p><dl><div><dt>Athlete records</dt><dd>${a.playerCount||0}</dd></div><div><dt>Last AGM</dt><dd>${a.lastAGM||'Not recorded'}</dd></div></dl><button type="button" data-association="${a.id}">View association <span aria-hidden="true">↗</span></button></article>`).join('')||'<div class="directory-empty"><h3>No matching associations</h3><p>Try another search or clear your filters.</p><button type="button" id="clear-directory-filters">Clear filters</button></div>';
+ document.getElementById('association-pagination').innerHTML=`<button type="button" id="previous-association-page" ${associationPage===1?'disabled':''}>Previous</button><span>${associationPage} / ${pages}</span><button type="button" id="next-association-page" ${associationPage===pages?'disabled':''}>Next</button>`;
+ document.getElementById('previous-association-page').onclick=()=>{associationPage--;renderAssociations(q);};document.getElementById('next-association-page').onclick=()=>{associationPage++;renderAssociations(q);};
+ document.getElementById('clear-directory-filters')?.addEventListener('click',()=>{['assoc-status-filter','assoc-sport-filter','assoc-verification-filter','global-search'].forEach(id=>document.getElementById(id).value='');state.searchQuery='';associationPage=1;renderAssociations('');});
 }
 
 function renderPlayers(q) {
@@ -238,7 +190,7 @@ function renderPlayers(q) {
   const rows = list.map(p => {
     const assoc = getAssociation(p.associationId);
     return `
-      <tr class="cursor-pointer" onclick="showPlayerDetail('${p.id}')">
+      <tr class="cursor-pointer" data-player="${p.id}" role="button" tabindex="0">
         <td class="font-medium">${p.firstName} ${p.lastName}</td>
         <td>${assoc.shortName}</td>
         <td>${p.position || '—'}</td>
@@ -278,7 +230,7 @@ function renderEvents(q) {
   document.getElementById('events-list').innerHTML = list.map(e => {
     const assoc = getAssociation(e.associationId);
     return `
-      <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 card-hover cursor-pointer" onclick="showEventDetail('${e.id}')">
+      <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 card-hover cursor-pointer" data-event="${e.id}" role="button" tabindex="0">
         <div class="flex flex-wrap items-start justify-between gap-2">
           <div>
             <h3 class="font-semibold">${e.name}</h3>
@@ -372,13 +324,16 @@ function showAssociationDetail(id) {
     <p><span class="text-slate-500">Status:</span> ${a.status}</p>
     <p><span class="text-slate-500">President:</span> ${a.president || '—'}</p>
     <p><span class="text-slate-500">General Secretary:</span> ${a.generalSecretary || '—'}</p>
-    <p><span class="text-slate-500">Email:</span> ${a.email || '—'}</p>
-    <p><span class="text-slate-500">Phone:</span> ${a.phone || '—'}</p>
+
+
     <p><span class="text-slate-500">Last AGM:</span> ${a.lastAGM || '—'}</p>
     <p><span class="text-slate-500">Strategic Plan:</span> ${a.strategicPlan ? 'Submitted' : 'Not on file'}</p>
-    <p><span class="text-slate-500">Registered Players (sample):</span> ${a.playerCount}</p>
+    <p><span class="text-slate-500">Athlete records:</span> ${a.playerCount}</p>
     ${a.website && /^https?:\/\//i.test(a.website) ? `<p><span class="text-slate-500">Website:</span> <a href="${a.website}" target="_blank" rel="noopener noreferrer" class="text-green-700 underline">${a.website}</a></p>` : ''}
   `;
+  const body=document.getElementById('modal-body');
+  const note=document.createElement('p');note.className='source-note';note.textContent='Profile verification: '+(a.verificationStatus||'Awaiting MNCS review');body.appendChild(note);
+  if(a.sourceUrl){try{const url=new URL(a.sourceUrl);if(url.protocol==='https:'){const link=document.createElement('a');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent='View source listing';body.appendChild(link);}}catch{}}
   openModal();
 }
 
@@ -399,11 +354,16 @@ function showEventDetail(id) {
   openModal();
 }
 
+let modalReturnFocus=null;
 function openModal() {
+  modalReturnFocus=document.activeElement;
   document.getElementById('modal').classList.add('show');
+  document.getElementById('modal-close').focus();
+  document.body.style.overflow='hidden';
 }
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
+  document.body.style.overflow='';modalReturnFocus?.focus();
 }
 
 // Event listeners
@@ -412,11 +372,13 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-  document.getElementById('mobile-nav').classList.toggle('hidden');
+  const hidden=document.getElementById('mobile-nav').classList.toggle('hidden');
+  document.getElementById('mobile-menu-btn').setAttribute('aria-expanded',String(!hidden));
 });
 
 document.getElementById('global-search').addEventListener('input', (e) => {
   state.searchQuery = e.target.value;
+  associationPage=1;
   renderCurrentView();
 });
 
@@ -431,5 +393,13 @@ document.getElementById('modal').addEventListener('click', (e) => {
   if (e.target.id === 'modal') closeModal();
 });
 
+document.querySelector('main').addEventListener('click',event=>{const target=event.target.closest('[data-association],[data-player],[data-event]');if(!target)return;if(target.dataset.association)showAssociationDetail(target.dataset.association);if(target.dataset.player)showPlayerDetail(target.dataset.player);if(target.dataset.event)showEventDetail(target.dataset.event);});
+document.querySelector('main').addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target.matches('[data-player],[data-event]')){event.preventDefault();event.target.click();}});
+document.addEventListener('keydown',event=>{const modal=document.getElementById('modal');if(!modal.classList.contains('show'))return;if(event.key==='Escape')closeModal();if(event.key==='Tab'){const nodes=[...modal.querySelectorAll('button,a[href],input,select,textarea')];const first=nodes[0],last=nodes[nodes.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
+document.getElementById('explore-directory').onclick=()=>switchView('associations');document.getElementById('open-workspace').onclick=()=>switchView('portal');
+['assoc-status-filter','assoc-sport-filter','assoc-verification-filter','assoc-sort'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{associationPage=1;renderAssociations(state.searchQuery.toLowerCase().trim());}));
+document.getElementById('export-associations').onclick=()=>{const headers=['id','name','sport','shortName','status','verificationStatus','sourceUrl'];const decode=value=>{const node=document.createElement('textarea');node.innerHTML=String(value??'');return node.value;};const cell=value=>{let text=decode(value);if(/^[\s]*[=+@\-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};const content=[headers,...filteredAssociations().map(a=>headers.map(key=>a[key]))].map(row=>row.map(cell).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='MNCS-association-directory.csv';link.click();URL.revokeObjectURL(url);};
+window.addEventListener('hashchange',()=>{const next=location.hash.slice(1);if(['dashboard','associations','players','events','results','awards','portal'].includes(next)&&next!==state.currentView)switchView(next);});
 // Init
+const initialView=location.hash.slice(1);if(['dashboard','associations','players','events','results','awards','portal'].includes(initialView))switchView(initialView);
 loadData();

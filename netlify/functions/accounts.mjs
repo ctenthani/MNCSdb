@@ -27,11 +27,12 @@ export function originAllowed(origin,env=process.env){
 export const handler=async(event)=>{
  const headers={'Content-Type':'application/json','Cache-Control':'no-store'};
  const result=(code,message,extra={})=>({statusCode:code,headers,body:JSON.stringify({message,...extra})});
- if(event.httpMethod!=='POST')return result(405,'Use POST.');
+ if(event.httpMethod==='GET'){const missing=['SUPABASE_URL','SUPABASE_SECRET_KEY'].filter(name=>!process.env[name]?.trim());if(![process.env.SITE_ORIGIN,process.env.URL].some(canonicalOrigin))missing.push('SITE_ORIGIN');return result(missing.length?503:200,missing.length?'Account service setup incomplete.':'Account service settings present.',{ready:missing.length===0,missing});}
+ if(event.httpMethod!=='POST')return result(405,'Use GET for status or POST for account operations.');
  const requestHeaders=Object.fromEntries(Object.entries(event.headers||{}).map(([key,value])=>[key.toLowerCase(),value]));
  if(!originAllowed(requestHeaders.origin))return result(403,'Request origin is not authorised. Set Netlify SITE_ORIGIN to the exact site URL (https://mncsdb.netlify.app), enable its Functions scope, and redeploy.');
  const base=process.env.SUPABASE_URL?.trim().replace(/\/$/,''),secret=process.env.SUPABASE_SECRET_KEY?.trim();
- if(!base||!secret)return result(503,'Account service needs server configuration.');
+ if(!base||!secret)return result(503,'Account service needs '+[!base?'SUPABASE_URL':null,!secret?'SUPABASE_SECRET_KEY':null].filter(Boolean).join(' and ')+'. Add the missing private settings in Netlify Functions and redeploy.');
  if((event.body||'').length>16000)return result(413,'Request too large.');
  let body;try{body=JSON.parse(event.body);}catch{return result(400,'Invalid request.');}
  const api=async(path,method='GET',data)=>{

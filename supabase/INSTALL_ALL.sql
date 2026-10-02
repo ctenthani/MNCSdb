@@ -1,4 +1,4 @@
--- MNCS v0.7 COMPLETE INSTALLER
+-- MNCS v0.8 COMPLETE INSTALLER
 -- Run this ONE file in Supabase SQL Editor. Replaces running individual migrations.
 -- Supports a new project or the earlier app schemas; preserves records and setup state.
 -- All changes commit together. If an existing incompatible record causes an error,
