@@ -11,3 +11,9 @@ test('admin creation checks registered association and creates matching profile'
 test('initial setup needs the secret and an atomic available claim',async()=>{await withMock(path=>path==='/rest/v1/rpc/claim_initial_admin'?false:undefined,async calls=>{assert.equal((await handler(event({...account,action:'bootstrap',setup_code:'wrong'}))).statusCode,403);assert.equal(calls.length,0);assert.equal((await handler(event({...account,action:'bootstrap',setup_code:env.MNCS_SETUP_CODE}))).statusCode,409);assert(!calls.some(c=>c.path==='/auth/v1/admin/users'));});});
 test('successful initial setup creates admin profile through completion transaction',async()=>{await withMock(path=>({'/rest/v1/rpc/claim_initial_admin':true,'/auth/v1/admin/users':{id:'first-admin'},'/rest/v1/rpc/complete_initial_admin':null}[path]),async calls=>{assert.equal((await handler(event({...account,action:'bootstrap',setup_code:env.MNCS_SETUP_CODE}))).statusCode,201);assert.equal(calls.find(c=>c.path.includes('complete_initial_admin')).body.user_id,'first-admin');});});
 test('requests from other origins are rejected before privileged operations',async()=>{await withMock(()=>undefined,async calls=>{const request=event({...account,action:'create-account'});request.headers.origin='https://other.example.org';assert.equal((await handler(request)).statusCode,403);assert.equal(calls.length,0);});});
+test('association service reports duplicate IDs without an unrelated email error',async()=>{
+ await withMock(path=>path==='/auth/v1/user'?{id:'admin-id'}:path==='/rest/v1/profiles'?[{role:'admin'}]:path==='/rest/v1/registry'?{status:409,body:{code:'23505'}}:undefined,async()=>{
+  const response=await handler(event({action:'create-association',id:'BUM',name:'Bowling Union of Malawi',sport:'Bowling',shortName:'BUM'}));
+  assert.equal(response.statusCode,409);assert.match(JSON.parse(response.body).message,/association ID/);
+ });
+});

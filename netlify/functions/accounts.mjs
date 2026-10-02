@@ -28,7 +28,11 @@ export const handler=async(event)=>{
  const api=async(path,method='GET',data)=>{
   const response=await fetch(base+path,{method,headers:{apikey:secret,Authorization:`Bearer ${secret}`,'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data),signal:AbortSignal.timeout(15000)});
   const text=await response.text();let value;try{value=text?JSON.parse(text):null;}catch{value=null;}
-  if(!response.ok)throw Error('Account operation failed. Check server configuration or whether that email is already registered.');
+  if(!response.ok){
+   const error=new Error('Account operation failed.');
+   error.status=response.status;error.code=value?.code;error.path=path;
+   throw error;
+  }
   return value;
  };
  let claim=null,createdId=null,completed=false;
@@ -69,6 +73,12 @@ export const handler=async(event)=>{
   // Compensate only the newly created user; never delete an existing account.
   if(createdId&&!completed){try{await api('/auth/v1/admin/users/'+encodeURIComponent(createdId),'DELETE');}catch{return result(503,'Account provisioning was interrupted. An administrator must inspect Auth and profiles before retrying.');}}
   if(claim&&!completed){try{await api('/rest/v1/rpc/release_initial_admin','POST',{operation_id:claim});}catch{return result(503,'Initial setup was interrupted. An administrator must inspect the setup claim before retrying.');}}
+  if(body.action==='create-association'){
+   if(error.code==='23505')return result(409,'That association ID is already registered. Choose another ID or use the existing association.');
+   if(error.status===401||error.status===403)return result(503,'Association service cannot access the database. The site owner must check the Netlify SUPABASE_SECRET_KEY and redeploy.');
+   if(error.code==='42P01'||error.code==='PGRST205')return result(503,'The registry table is unavailable. Run supabase/INSTALL_ALL.sql in the connected Supabase project.');
+   return result(503,'Association registration could not be completed. Check the Netlify function settings and logs, then retry.');
+  }
   return result(400,error.message?.startsWith('Enter')||error.message?.startsWith('Use')||error.message?.startsWith('Select')||error.message?.startsWith('Invalid')?error.message:'Account operation failed. Check configuration and whether this email already exists.');
  }
 };

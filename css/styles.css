@@ -84,3 +84,60 @@ tr:hover td {
 #award-workspace button {background:#166534;color:white;padding:12px;border-radius:8px;}
 #award-workspace button:disabled {opacity:.5;}
 #award-notice {padding-top:12px;}
+
+/* Signed-in workspace */
+#portal-content { padding:0; background:transparent; border:0; }
+#portal-content > form, #portal-content > h3, #portal-content > p,
+#portal-content > details { max-width:760px; margin:20px auto; }
+.workspace-hero { background:#123e31; color:#fff; padding:28px 32px; border-radius:18px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+#portal-content .workspace-hero h3 { font-size:1.8rem; letter-spacing:-.04em; margin:4px 0 12px; color:#fff; }
+.workspace-eyebrow { font-size:.7rem; letter-spacing:.15em; font-weight:700; color:#b5deca; }
+.workspace-hero p { line-height:1.8; }
+#portal-content .workspace-hero button { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.35); white-space:nowrap; }
+.role-pill { display:inline-block; margin-left:8px; padding:2px 10px; border-radius:999px; background:rgba(255,255,255,.13); font-size:.75rem; }
+.portal-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:20px 0; }
+.workspace-stat { background:white; border:1px solid #e2e8f0; border-radius:14px; padding:18px 22px; box-shadow:0 3px 10px rgba(15,23,42,.025); }
+.workspace-stat span { display:block; color:#64748b; font-size:.8rem; font-weight:600; }
+.workspace-stat strong { display:block; color:#123e31; font-size:2rem; line-height:1.3; margin-top:8px; }
+.workspace-nav { display:flex; flex-wrap:wrap; gap:6px; border-bottom:1px solid #dce5df; padding-bottom:12px; margin-bottom:20px; }
+#portal-content .workspace-nav button { color:#526172; background:transparent; font-size:.85rem; font-weight:600; margin:0; padding:10px 15px; }
+#portal-content .workspace-nav button.selected { color:#14532d; background:#e4f2e9; }
+.workspace-panel { background:white; border:1px solid #e2e8f0; border-radius:16px; padding:28px; box-shadow:0 4px 18px rgba(15,23,42,.025); }
+.workspace-panel[hidden] { display:none!important; }
+#portal-content .workspace-panel h3 { margin:0 0 10px; font-size:1.2rem; color:#152c24; }
+.panel-intro { margin-bottom:24px; }
+.workspace-panel p { color:#64748b; line-height:1.65; font-size:.9rem; }
+#portal-content .workspace-panel form { align-items:start; gap:20px; }
+#portal-content label { color:#334155; font-size:.82rem; font-weight:600; }
+#portal-content input,#portal-content select,#portal-content textarea { background:#fff; border-color:#cbd5e1; min-height:44px; font-size:.9rem; font-weight:400; }
+#portal-content textarea { min-height:96px; }
+#portal-content button { min-height:42px; font-weight:600; cursor:pointer; }
+#portal-content button:disabled { cursor:wait; }
+#portal-content input:focus,#portal-content select:focus,#portal-content textarea:focus,#portal-content button:focus-visible { outline:3px solid #a7d7ba; outline-offset:2px; }
+#portal-content form > button { grid-column:1/-1; justify-self:start; min-width:160px; }
+#portal-content .form-feedback { grid-column:1/-1; margin:0; }
+#portal-content .form-feedback[data-state=error] { color:#b42318; background:#fef3f2; padding:12px; border-radius:8px; }
+#portal-content .form-feedback[data-state=success] { color:#166534; }
+.workspace-actions { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 28px; }
+.workspace-help { padding:22px; background:#f4f8f6; border-left:3px solid #26835b; border-radius:8px; }
+.workspace-help h4 { font-weight:700; margin-bottom:6px; color:#123e31; }
+.workspace-empty { padding:36px 16px; text-align:center; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; }
+#association-directory { margin-top:32px; }
+.submission-card { border-color:#e2e8f0; padding:22px; }
+.submission-card > pre { max-height:240px; overflow:auto; padding:16px; background:#f8fafc; border-radius:8px; }
+.submission-card details { margin-top:14px; }
+#portal-notice:empty { display:none; }
+#portal-notice:not(:empty) { margin-bottom:16px; background:#edf6ef; border:1px solid #d2e6d8; border-radius:10px; overflow-wrap:anywhere; }
+@media (max-width:640px) {
+ .workspace-hero { padding:22px; align-items:flex-start; }
+ #portal-content .workspace-hero h3 { font-size:1.35rem; }
+ .role-pill { margin-left:0; }
+ .portal-stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+ .workspace-stat { padding:14px; }
+ .workspace-stat span { font-size:.72rem; }
+ .workspace-panel { padding:20px; }
+ #portal-content form { grid-template-columns:minmax(0,1fr); }
+ .workspace-nav { gap:3px; }
+ #portal-content .workspace-nav button { padding:9px 10px; font-size:.8rem; }
+ .workspace-actions { flex-direction:column; align-items:stretch; }
+}

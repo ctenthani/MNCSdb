@@ -1,6 +1,6 @@
-# MNCS Registry v0.6 — install the latest package
+# MNCS Registry v0.6.2 — install the latest package
 
-This ZIP contains all implemented features from v0.2 through v0.6. You do not need
+This ZIP contains all implemented features from v0.2 through v0.6.2. You do not need
 to deploy earlier ZIPs or run their SQL files individually.
 
 1. Make a backup/export of existing project data before installing.
@@ -22,7 +22,7 @@ to deploy earlier ZIPs or run their SQL files individually.
 6. If no MNCS admin exists, open Workspace → Set up the initial MNCS administrator.
    Create your account with your privately chosen email/password and setup code.
    Remove MNCS_SETUP_CODE and redeploy after success. Existing admins should sign in.
-7. Use Account management to register associations and create their accounts.
+7. In Workspace, use Associations to register associations, then Create accounts to add their representatives. Association registration uses your signed-in administrator session and the new registry_admin_register database policy. Account creation still requires the Netlify function settings.
 8. In Awards, use Configure an awards cycle to enter the year and junior reference
    date. The rule is under 20 on that date, not 20 or younger. 31 December of the
    qualifying year is a possible reference date, but MNCS must choose it explicitly.

@@ -170,3 +170,7 @@ For the project owner only, `supabase/RECOVER_FIRST_ADMIN.sql` can repair the fi
 admin profile for a specified existing Auth account. It refuses to overwrite a
 profile, bypass a pending bootstrap, or create another admin when one exists.
 Do not add this recovery query to normal installation or public signup.
+
+## v0.6.2 workspace and association registration
+
+See V0.6.2_UPDATE.md for the updated registration flow, signed-in workspace and installation instructions. Run the latest supabase/INSTALL_ALL.sql before using association registration.
