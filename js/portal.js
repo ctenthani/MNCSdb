@@ -9,9 +9,10 @@ const notice = document.getElementById('portal-notice');
 const message = s => { notice.textContent = s; };
 async function refresh() {
  if (db && user) {
-  const p = await db.from('profiles').select('*').eq('id', user.id).single();
+  const p = await db.from('profiles').select('*').eq('id', user.id).maybeSingle();
   if(p.error) throw p.error;
   profile = p.data;
+  if(!profile){submissions=[];requirements=[];renderPortal();message('Your sign-in succeeded, but no MNCS or association profile is assigned. Ask the MNCS administrator to complete account provisioning.');return;}
   const r = await db.from('submissions').select('*').order('created_at',{ascending:false});
   if(r.error) throw r.error;
   submissions = r.data;
@@ -22,9 +23,13 @@ async function refresh() {
  renderPortal();
 }
 function renderPortal() {
+ if(user&&!profile){
+  root.innerHTML='<h3>Account setup incomplete</h3><p>Your authentication account has no accessible role profile. No administrative permissions have been granted.</p><button id="profile-signout">Sign out</button>';
+  document.getElementById('profile-signout').onclick=async()=>{if(db)await db.auth.signOut();user=profile=null;submissions=[];requirements=[];renderPortal();message('Signed out.');};return;
+ }
  if (!user) {
   root.innerHTML = live ? `<h3>Association and MNCS sign-in</h3><form id="login"><label>Email<input name="email" type="email" required autocomplete="username"></label><label>Password<input name="password" type="password" required autocomplete="current-password"></label><button>Sign in</button></form><p>Accounts are provisioned by the MNCS administrator.</p>` : `<h3>Workflow preview</h3><p>Supabase is not connected. This preview uses fictional records in memory; it does not authenticate users or save documents.</p><button id="demo-association">Preview association workspace</button> <button id="demo-reviewer">Preview MNCS review workspace</button>`;
-  document.getElementById('login')?.addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target);try{const r=await db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});if(r.error)throw r.error;user=r.data.user;await refresh();message('Signed in.');}catch(e){message(e.message);}});
+  document.getElementById('login')?.addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target);try{const r=await db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});if(r.error)throw r.error;user=r.data.user;await refresh();if(profile)message('Signed in.');}catch(e){message(e.message);}});
   window.MNCS_ACCOUNTS?.mount(root,db,null,refresh);
   ['association','reviewer'].forEach(role=>document.getElementById('demo-'+role)?.addEventListener('click',()=>{user={id:'preview'};profile={role,association_id:state.associations[0]?.id};renderPortal();}));return;
  }
@@ -92,6 +97,6 @@ function renderReporting(reviewer){
  document.getElementById('export-report').onclick=()=>{const link=document.createElement('a');const url=URL.createObjectURL(new Blob([window.MNCS_REPORTING.csv(rows)],{type:'text/csv;charset=utf-8'}));link.href=url;link.download='MNCS-management-report.csv';link.click();URL.revokeObjectURL(url);};
  document.getElementById('requirement-form')?.addEventListener('submit',async e=>{e.preventDefault();try{const f=new FormData(e.target);const row={id:crypto.randomUUID(),kind:f.get('kind'),period:String(f.get('period')).trim(),due_date:f.get('due'),association_id:f.get('association')||null};if(requirements.some(r=>r.kind===row.kind&&r.period===row.period&&r.association_id===row.association_id))throw Error('This requirement already exists.');if(db){const result=await db.from('reporting_requirements').insert(row);if(result.error)throw result.error;await refresh();}else{requirements.push(row);renderPortal();}message('Requirement added.');}catch(e){message(e.message);}});
 }
-if(db)db.auth.getSession().then(async({data})=>{user=data.session?.user||null;try{await refresh();}catch(e){message(e.message);}});else renderPortal();
+if(db)db.auth.getSession().then(async({data})=>{user=data.session?.user||null;try{await refresh();}catch(e){renderPortal();message(e.message);}});else renderPortal();
 window.MNCS_DB=db;
 })();

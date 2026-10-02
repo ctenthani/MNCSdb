@@ -161,3 +161,12 @@ Start with `START_HERE.md` and run only `supabase/INSTALL_ALL.sql`. It includes 
 implemented database versions. Junior candidates must be under 20 on an explicit
 cycle reference date. Judges-only awards are an openly disclosed proposed policy
 amendment, not a hidden removal of the handbook public-vote component.
+
+## v0.6.1 sign-in recovery
+
+Users created manually in Supabase Auth may lack a profiles row. The app now
+shows Account setup incomplete and a Sign out button instead of a blank workspace.
+For the project owner only, `supabase/RECOVER_FIRST_ADMIN.sql` can repair the first
+admin profile for a specified existing Auth account. It refuses to overwrite a
+profile, bypass a pending bootstrap, or create another admin when one exists.
+Do not add this recovery query to normal installation or public signup.
