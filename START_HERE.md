@@ -1,11 +1,11 @@
-# MNCS Registry v0.6.2 — install the latest package
+# MNCS Registry v0.7 — install the latest package
 
-This ZIP contains all implemented features from v0.2 through v0.6.2. You do not need
+This ZIP contains all implemented features from v0.2 through v0.7. You do not need
 to deploy earlier ZIPs or run their SQL files individually.
 
 1. Make a backup/export of existing project data before installing.
 2. Open Supabase project `owvuayretqnibwwhonch` → SQL Editor.
-3. Paste and run **supabase/INSTALL_ALL.sql**. Run this one file only. It creates
+3. Paste and run **supabase/INSTALL_ALL.sql**. Run this one file only. It imports researched association candidates marked for MNCS verification and creates
    new tables or updates the earlier app schemas, preserving records and initial
    administrator setup state. Changes run inside a transaction; if incompatible
    records cause an error, keep the error for review rather than deleting records.
@@ -44,3 +44,6 @@ The full installer was checked for SQL syntax, not executed against your live
 project. Live authentication, RLS, account service and document tests remain
 necessary. Prior manual edits to table definitions/policies may require review.
 Email invitations and forgotten-password recovery are not implemented.
+
+## v0.7 account error, demo and password resets
+Read V0.7_UPDATE.md for the SITE_ORIGIN fix, isolated pseudo accounts using 1234, sourced associations and administrator password resets.

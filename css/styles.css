@@ -141,3 +141,7 @@ tr:hover td {
  #portal-content .workspace-nav button { padding:9px 10px; font-size:.8rem; }
  .workspace-actions { flex-direction:column; align-items:stretch; }
 }
+.demo-banner { position:sticky;top:0;z-index:60;padding:12px 20px;background:#7c2d12;color:white;text-align:center;font-weight:600;font-size:.85rem; }
+.demo-banner a {text-decoration:underline;}
+#generated-password:not(:empty) {padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;overflow-wrap:anywhere;}
+#portal-content #reset-password-form {border-top:1px solid #e2e8f0;padding-top:20px;}

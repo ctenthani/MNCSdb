@@ -174,3 +174,7 @@ Do not add this recovery query to normal installation or public signup.
 ## v0.6.2 workspace and association registration
 
 See V0.6.2_UPDATE.md for the updated registration flow, signed-in workspace and installation instructions. Run the latest supabase/INSTALL_ALL.sql before using association registration.
+
+## v0.7 account management and isolated demo
+
+See V0.7_UPDATE.md. This version adds normalised trusted-origin checking, administrator password resets, association editing, 29 MOC-sourced candidates and demo.html with in-memory pseudo accounts using 1234. Live awards voting remains unimplemented.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {handler,validateAccount,equalSecret} from '../netlify/functions/accounts.mjs';
+import {handler,validateAccount,equalSecret,originAllowed} from '../netlify/functions/accounts.mjs';
 const account={email:'person@example.org',password:'a-test-password-123',display_name:'Example Person',role:'association',association_id:'BUM'};
 const env={SUPABASE_URL:'https://test.example.org',SUPABASE_SECRET_KEY:'server-only-test-key',SITE_ORIGIN:'https://site.example.org',MNCS_SETUP_CODE:'x'.repeat(40)};
 const event=body=>({httpMethod:'POST',headers:{origin:env.SITE_ORIGIN,authorization:'Bearer test-user-token'},body:JSON.stringify(body)});
@@ -15,5 +15,34 @@ test('association service reports duplicate IDs without an unrelated email error
  await withMock(path=>path==='/auth/v1/user'?{id:'admin-id'}:path==='/rest/v1/profiles'?[{role:'admin'}]:path==='/rest/v1/registry'?{status:409,body:{code:'23505'}}:undefined,async()=>{
   const response=await handler(event({action:'create-association',id:'BUM',name:'Bowling Union of Malawi',sport:'Bowling',shortName:'BUM'}));
   assert.equal(response.statusCode,409);assert.match(JSON.parse(response.body).message,/association ID/);
+ });
+});
+
+test('origin matching tolerates whitespace, trailing slash and header case without trusting other sites',async()=>{
+ assert.equal(originAllowed('https://site.example.org',{SITE_ORIGIN:' https://site.example.org/ '}),true);
+ assert.equal(originAllowed('https://site.example.org',{URL:'https://site.example.org'}),true);
+ assert.equal(originAllowed('https://site.example.org.evil.test',{SITE_ORIGIN:'https://site.example.org'}),false);
+ assert.equal(originAllowed('null',{SITE_ORIGIN:'https://site.example.org'}),false);
+ assert.equal(originAllowed('https://site.example.org',{SITE_ORIGIN:'https://user@site.example.org'}),false);
+ await withMock(path=>path==='/auth/v1/user'?{id:'reviewer-id'}:path==='/rest/v1/profiles'?[{role:'reviewer'}]:undefined,async()=>{
+  const request=event({...account,action:'create-account'});request.headers={Origin:env.SITE_ORIGIN,Authorization:'Bearer user-token'};assert.equal((await handler(request)).statusCode,403);
+ });
+});
+test('admin reset updates only the selected managed account and never stores the password in profiles',async()=>{
+ const target='00000000-0000-4000-8000-000000000001';
+ await withMock((path,options)=>path==='/auth/v1/user'?{id:'admin-id'}:path==='/rest/v1/profiles'?[{role:'admin',id:target}]:path==='/auth/v1/admin/users/'+target?{id:target}:undefined,async calls=>{
+  const response=await handler(event({action:'reset-password',user_id:target,password:'New-Temporary-Password7!'}));assert.equal(response.statusCode,200);
+  const change=calls.find(c=>c.method==='PUT');assert.equal(change.path,'/auth/v1/admin/users/'+target);assert.equal(change.body.password,'New-Temporary-Password7!');assert(!calls.some(c=>c.path==='/rest/v1/profiles'&&c.method!=='GET'));
+ });
+});
+test('reviewers cannot reset passwords and short production passwords are rejected',async()=>{
+ await withMock(path=>path==='/auth/v1/user'?{id:'reviewer-id'}:path==='/rest/v1/profiles'?[{role:'reviewer'}]:undefined,async calls=>{
+  assert.equal((await handler(event({action:'reset-password',user_id:'00000000-0000-4000-8000-000000000001',password:'a-long-password'}))).statusCode,403);assert(!calls.some(c=>c.method==='PUT'));
+ });
+});
+
+test('admin reset rejects 1234 before calling Auth admin API',async()=>{
+ await withMock(path=>path==='/auth/v1/user'?{id:'admin-id'}:path==='/rest/v1/profiles'?[{role:'admin'}]:undefined,async calls=>{
+  const result=await handler(event({action:'reset-password',user_id:'00000000-0000-4000-8000-000000000001',password:'1234'}));assert.equal(result.statusCode,400);assert(!calls.some(c=>c.method==='PUT'));
  });
 });

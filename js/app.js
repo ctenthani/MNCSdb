@@ -26,7 +26,7 @@ async function loadData() {
       const {data,error} = await window.MNCS_DB.from('registry').select('*');
       if(error) throw error;
       ['associations','players','events','results'].forEach(k => state[k] = data.filter(r=>r.collection===k).map(r=>r.payload));
-      document.getElementById('data-banner').textContent = 'Connected registry · only approved public records are displayed';
+      document.getElementById('data-banner').textContent = window.MNCS_DB.demo?'DEMO ONLY · data in this page session; no live accounts or records':'Connected registry · sourced candidates and registered associations remain subject to MNCS verification';
     }
     // Public data must not contain private athlete or official contact details.
     state.players.forEach(p=>{delete p.phone;delete p.dateOfBirth;});
