@@ -1,69 +1,30 @@
-# MNCS Registry V1.0 — start here
+# MNCS Registry V1.1 — start here
 
-This complete package simplifies the working portal. Each association saves its
-own athletes, teams, fixtures and results directly. Only competitions go to MNCS
-for approval. Reports, awards nominations and requests have a separate council inbox.
+MNCSdb now handles the national register and council work. Association sites handle sport operations. Darts Malawi is the first connector pilot.
 
-## Upgrade your existing portal
+## Upgrade MNCSdb
 
-1. Export a backup of your Supabase data.
-2. In project `owvuayretqnibwwhonch`, open SQL Editor and run
-   **supabase/INSTALL_ALL.sql** once. This file contains all required migrations.
-3. Replace the files in your Git-connected Netlify repository with this package.
-   Keep index.html at the root and netlify/functions intact. Redeploy.
-4. Retain the working SUPABASE_URL, SUPABASE_SECRET_KEY and SITE_ORIGIN settings.
-   Keep private keys in Functions settings. Retain the targeted
-   SECRETS_SCAN_OMIT_KEYS=SUPABASE_URL setting if needed; do not disable secret scanning.
-5. Sign in with your existing account. Do not repeat initial administrator setup.
-6. Check the account name, email, role and association shown below the navigation.
+1. Back up your Supabase data and current site files.
+2. In Supabase project `owvuayretqnibwwhonch`, open SQL Editor and run **supabase/INSTALL_ALL.sql** once. This complete transactional file includes every required migration through V1.1. Do not run the versioned files separately.
+3. Replace the files in your existing Git-connected MNCSdb Netlify repository with this package. Keep index.html at the root and netlify/functions intact. Redeploy through Git, with Functions enabled.
+4. Retain the working SUPABASE_URL, SUPABASE_SECRET_KEY and SITE_ORIGIN environment settings. Private keys belong in Functions settings. Retain SECRETS_SCAN_OMIT_KEYS=SUPABASE_URL if needed for the public URL false positive; do not disable secret scanning.
+5. Sign in with your existing MNCS administrator account. Do not repeat first-administrator setup.
+6. Check Workspace → Association sites. Select the correct registered Darts association, enter `https://dartsmw.netlify.app/`, and create its connection. The researched Darts candidate is not automatically treated as affiliated.
+7. Copy the connection ID and one-time token privately into the Darts site's Functions environment settings, following **integrations/darts/README.md**. Do not put the token into browser JavaScript, Git or chat.
 
-## Association: manage your sport
+## Pilot flow
 
-1. Open Workspace → Manage my sport. Add an athlete or team and click Save.
-   Choose public permission explicitly; birth dates stay private.
-2. Add your competition; save the draft and click Submit to MNCS.
-3. After council accepts the competition, save fixtures and results directly.
-4. For a team tournament, open Competitions → Automatic tournament planner.
-   Choose teams and generate round-robin or knockout fixtures.
-5. For knockout fixtures, record the winning team's result in Results, then
-   choose that team and click Advance winner in the tournament.
-6. Open Rankings to set your sport's placing points and view its leaderboard.
-7. Open Council requests & reports for an annual report, funding request,
-   travel abroad, MRA clearance or another request. Save, then submit to council.
-8. Open Awards and click a category. Its nomination form is selected for you.
-   Fill athlete achievements from your records, add your justification and PDF,
-   save the draft, then submit through Council requests & reports.
+1. Install the addon into the existing Darts source and deploy the whole Darts project, retaining its current results function.
+2. Sign in on Darts using its existing site administrator login. Open its new MNCS tab.
+3. Select a regional league or competition, complete its dates and send it to MNCS.
+4. MNCS reviews it in Workspace → Competitions. Darts retrieves the decision and comments when receipts are refreshed.
+5. After acceptance, preview and share the regional league performance summary. Player names are excluded unless explicitly selected for public sharing. Individual results remain managed by Darts.
+6. Funding, travel, MRA clearance and other completed requests enter the private council inbox directly.
+7. Reports and nominations arrive as private drafts. An association representative signs into MNCSdb, opens Incoming drafts, attaches the required PDF and submits. Junior nominees must be strictly under 20 under the existing eligibility rules.
+8. MNCS manages the awards cycle, judges and certification centrally. Public poll participation cannot change official judge scores.
 
-## MNCS: start an awards cycle
+The first pilot reads the current 2026 Darts league only. See the connector README for ranking rules and source limits. This is a manual share/refresh pilot; it does not yet run a scheduled background sync or provide a shared login.
 
-1. Create judge and independent auditor accounts in Account management.
-2. Open Awards. Set the year and the junior age reference date; junior nominees
-   must be strictly under 20 on that date. Open nominations when ready.
-3. Select judges-only scoring and record that MNCS approved and publicly
-   disclosed this amendment. The handbook's original public weighting differs.
-4. Review nomination eligibility in the council inbox. Click a category in Awards.
-5. Approve its criterion weights (total 100%) and judge count; normally five.
-   Add up to three eligible finalists with confirmed public consent. Assign judges
-   and an independent auditor. Resolve conflicts before opening judging.
-6. Open judging. Each judge signs in, reads evidence and seals a ballot for each
-   finalist. Marks are 0–10 per criterion. Other judges' marks remain hidden.
-7. MNCS may open a separate fan poll. It has ZERO effect on official scores.
-8. Close judging when all assigned ballots are complete. The auditor signs in,
-   reviews/downloads confidential records, independently checks them and certifies.
-9. Close the fan poll, then publish certified official results. Equal judge totals
-   share rank; the public sees official scores and the audit fingerprint.
+## Deployment status
 
-## Enable email verification for public polls
-
-Staff accounts continue to be created on the site by MNCS. Fans use verified email.
-In Supabase Authentication settings, enable the Email provider and new-user signups
-for fans; configure production SMTP. Set Site URL to `https://mncsdb.netlify.app`
-and allow the production `/index.html` redirect. In the Magic Link email template,
-include the verification code `{{ .Token }}` (you may retain its sign-in link).
-Test receipt and verification using an email you control before opening a poll.
-Email signup grants only the fan role; it cannot grant MNCS or association access.
-Supabase email quotas, rate limits and SMTP delivery still apply.
-
-Read **V1.0_RELEASE.md** and **V1.0_TEST_REPORT.md** for limits and verification.
-The offline demo is a basic walkthrough; ballots, polls and tournaments use the
-connected database. This package has been tested locally and is not deployed yet.
+The package was tested locally. It has not been deployed to your live sites. The Darts Netlify project link returned Access Denied and did not provide its source. To finish the Darts deployment, use the original Darts repository or current complete source ZIP. Do not upload the addon ZIP as a standalone replacement website.

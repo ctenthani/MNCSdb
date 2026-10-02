@@ -110,6 +110,7 @@ function renderCurrentView() {
     window.renderPublicFixtures?.();
   } else if (state.currentView === 'results') {
     renderResults(q);
+    window.renderNationalPerformance?.();
   }
 }
 

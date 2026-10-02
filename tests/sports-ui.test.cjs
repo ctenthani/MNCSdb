@@ -5,7 +5,7 @@ test('V1.0 workspace UI saves association records directly, reviews competitions
  Object.defineProperty(w,'crypto',{value:webcrypto});w.fetch=async path=>{assert(!String(path).startsWith('http'));return {ok:true,json:async()=>JSON.parse(fs.readFileSync(path,'utf8'))};};
  w.URL.createObjectURL=()=> 'blob:demo';w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=function(){w.lastDownload=this.download;};
  const settle=async()=>{for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));};
- w.eval(['demo','demo-sports','demo-awards','app','reporting','accounts','award-scoring','awards','tournaments','awards-desk','sports','portal'].map(file=>fs.readFileSync('js/'+file+'.js','utf8')).join('\n'));
+ w.eval(['demo','demo-sports','demo-awards','app','reporting','accounts','award-scoring','awards','tournaments','awards-desk','sports','portal'].map(file=>(file==='portal'?"window.MNCS_CONFIG.workspaceMode='operations';\n":'')+fs.readFileSync('js/'+file+'.js','utf8')).join('\n'));
  const click=selector=>{assert(d.querySelector(selector),'Missing '+selector);d.querySelector(selector).click();};
  const submit=selector=>d.querySelector(selector).dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
  const setFields=(selector,values)=>{const form=d.querySelector(selector);for(const [k,v] of Object.entries(values)){assert(form.elements[k],'Missing field '+k);form.elements[k].value=String(v);}return form;};

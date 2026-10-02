@@ -1,4 +1,4 @@
-> Historical setup guide. For V1.0, follow **START_HERE.md** and run only
+> Historical setup guide. For V1.1, follow **START_HERE.md** and run only
 > **supabase/INSTALL_ALL.sql**. Fan polls require Email signups enabled and
 > verified email; staff roles remain provisioned by MNCS on the site.
 

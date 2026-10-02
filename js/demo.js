@@ -52,7 +52,7 @@ const db={demo:true,from:query,auth:{async getSession(){await ready;return ok({s
  if(body.action==='create-account'){if(!['admin','reviewer','association','judge','auditor'].includes(body.role))throw Error('Invalid demo role');if(users.some(u=>u.email===body.email))throw Error('Demo email already exists');if(body.role==='association'&&!tables.registry.some(r=>r.id===body.association_id))throw Error('Select an association');const u={...body,id:crypto.randomUUID(),association_id:body.role==='association'?body.association_id:null};users.push(u);const {password,...profile}=u;tables.profiles.push(profile);return {message:'Demo account created in memory.'};}
  throw Error('Unsupported demo account action');
 }};
-window.MNCS_CONFIG={demo:true,supabaseUrl:'demo-only',supabaseKey:'demo-only'};
+window.MNCS_CONFIG={demo:true,workspaceMode:'national',supabaseUrl:'demo-only',supabaseKey:'demo-only'};
 window.supabase={createClient:()=>db};
 window.MNCS_DEMO={db,tables,users,ready};
 })();

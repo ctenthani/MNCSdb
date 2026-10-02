@@ -69,6 +69,7 @@ window.renderAwards=async()=>{
   nominationForm.elements.year.value=prefill?.year||new Date().getFullYear();
   nominationForm.hidden=true;
   if(prefill){nominationForm.elements.athleteId.value=prefill.athleteId;fillAchievements();window.MNCS_NOMINATION_PREFILL=null;}
+  const external=window.MNCS_EXTERNAL_NOMINATION;if(external){for(const field of ['nomineeName','description','motivation','dateOfBirth'])nominationForm.elements[field].value=external[field]||'';nominationForm.elements.year.value=external.year;nominationForm.dataset.sourceIntegrationId=external.sourceIntegrationId;window.MNCS_EXTERNAL_NOMINATION=null;}
   if(window.MNCS_SELECTED_AWARD&&window.MNCS_SELECTED_AWARD!=='personality')await chooseCategory(window.MNCS_SELECTED_AWARD);
   else if(prefill){const athlete=athletes.find(a=>a.id===prefill.athleteId);await chooseCategory(athlete?.published_payload.gender==='Female'?'sportswoman':'sportsman');}
   document.getElementById('award-nomination-form').addEventListener('submit',async event=>{
@@ -80,6 +81,7 @@ window.renderAwards=async()=>{
     if(!name||!String(f.get('motivation')).trim()||!String(f.get('description')).trim())throw Error('Complete the nomination details.');
     const document_path=`${profile.association_id}/${id}.pdf`;
     const payload={categoryId:category.id,categoryName:category.name,nomineeType:category.nomineeType,nomineeName:name,athleteId:String(f.get('athleteId')||'').trim(),description:String(f.get('description')).trim(),motivation:String(f.get('motivation')).trim(),dateOfBirth:String(f.get('dateOfBirth')||''),declaration:true,screeningOnly:true};
+    if(event.target.dataset.sourceIntegrationId)payload.sourceIntegrationId=event.target.dataset.sourceIntegrationId;
     if(category.id.startsWith('junior-')&&!payload.dateOfBirth)throw Error('Junior nominations require a date of birth and evidence in the supporting PDF.');
     const exists=await db.from('submissions').select('id').eq('association_id',profile.association_id).eq('kind','Award nomination').eq('period',period).contains('payload',{categoryId:category.id,nomineeName:name});
     if(exists.error)throw exists.error;if(exists.data.length)throw Error('A nomination for this person/category/year already exists.');
