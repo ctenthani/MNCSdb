@@ -271,3 +271,10 @@ button:disabled {cursor:not-allowed;opacity:.45;}
 .workspace-nav{flex-wrap:wrap;gap:.4rem}
 .workspace-nav button:focus-visible{outline:3px solid #22c55e;outline-offset:2px}
 @media(max-width:600px){.workspace-nav button{flex:1 0 140px;min-height:44px}.workspace-path{font-size:.8rem}}
+.performance-filter{display:block;max-width:36rem;margin:1.25rem 0;font-weight:600}
+.performance-filter select{display:block;width:100%;margin-top:.5rem;padding:.8rem;border:1px solid #cbd5e1;border-radius:.6rem;background:white;color:#123e32}
+.performance-expand{margin:1rem 0;border:1px solid #cbd5e1;border-radius:.6rem;padding:1rem}
+.performance-expand summary{cursor:pointer;font-weight:600}
+.performance-status{font-size:.85rem;color:#475569}
+.cleanup-rows small{display:block;color:#64748b}
+.cleanup-confirm{border:2px solid #e8c364;border-radius:.6rem;padding:1.25rem;margin:1rem 0}
