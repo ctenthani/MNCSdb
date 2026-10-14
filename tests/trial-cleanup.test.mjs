@@ -8,6 +8,7 @@ test('trial cleanup enforces role, explicit labels, stale previews and reversibl
  await pg.exec("insert into award_cycles(year,age_reference_date) values(2027,'2027-12-31')");
  const admin='10000000-0000-0000-0000-000000000001',reviewer='10000000-0000-0000-0000-000000000002',trial='20000000-0000-0000-0000-000000000001',real='20000000-0000-0000-0000-000000000002';
  await pg.query('insert into auth.users(id,email) values($1,$2),($3,$4)',[admin,'admin@example.org',reviewer,'reviewer@example.org']);await pg.query("insert into profiles(id,role,email) values($1,'admin','admin@example.org'),($2,'reviewer','reviewer@example.org')",[admin,reviewer]);
+ await pg.exec('create table auth.identities(id uuid primary key default gen_random_uuid(),user_id uuid references auth.users(id) on delete cascade)');await pg.query('insert into auth.identities(user_id) values($1)',[reviewer]);assert.equal((await pg.query('select account_deletion_check($1) data',[reviewer])).rows[0].data.blockers.length,0);
  await pg.query("insert into submissions(id,association_id,created_by,kind,period,payload) values($1,'TRIAL',$3,'Other request','2026','{\"title\":\"Trial\",\"summary\":\"Test explanation\"}'),($2,'REAL',$3,'Other request','2026','{\"title\":\"Genuine\",\"summary\":\"Real explanation\"}')",[trial,real,reviewer]);
  const login=async id=>{await pg.exec('reset role');await pg.query("select set_config('test.user',$1,false)",[id]);await pg.exec('set role authenticated');};
  const list=async()=>(await pg.query('select trial_cleanup_list() data')).rows[0].data;
