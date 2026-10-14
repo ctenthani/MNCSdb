@@ -66,6 +66,21 @@ export const handler=async(event)=>{
   const caller=await authResponse.json();
   const profiles=await api('/rest/v1/profiles?id=eq.'+encodeURIComponent(caller.id)+'&select=role');
   if(profiles?.[0]?.role!=='admin')return result(403,'Only MNCS administrators can manage accounts.');
+  if(['preview-delete','delete-account'].includes(body.action)){
+   const target=String(body.user_id||'');
+   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(target))return result(400,'Select an existing user.');
+   if(target.toLowerCase()===String(caller.id).toLowerCase())return result(403,'Your own administrator account is protected.');
+   const checked=await api('/rest/v1/rpc/account_deletion_check','POST',{target});
+   const managed=checked?.profile;
+   if(!managed||managed.role==='admin')return result(403,'Administrator accounts are protected.');
+   if(body.action==='preview-delete')return result(200,'Review this account before permanent deletion.',{account:{id:managed.id,email:managed.email,display_name:managed.display_name,role:managed.role},blockers:checked.blockers});
+   if(body.confirmation!==`DELETE ${managed.email}`)return result(400,'Type the exact deletion confirmation.');
+   if(checked.blockers?.length)return result(409,'Linked records prevent deletion. Preserve these records or remove only their explicitly identified trials first.',{blockers:checked.blockers});
+   const original=await api('/rest/v1/rpc/prepare_account_deletion','POST',{target,expected_email:managed.email});
+   try{await api('/auth/v1/admin/users/'+encodeURIComponent(target),'DELETE');}
+   catch{try{await api('/rest/v1/profiles','POST',original);}catch{return result(503,'Deletion was interrupted. The administrator must inspect this account in Supabase before retrying.');}return result(409,'The login could not be deleted. Its MNCS profile has been restored; check linked records before retrying.');}
+   return result(200,'Account and login permanently deleted.');
+  }
   if(body.action==='reset-password'){
    const targetId=String(body.user_id||'');
    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetId))return result(400,'Select an existing user.');

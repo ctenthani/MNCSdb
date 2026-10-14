@@ -79,8 +79,8 @@ function mount(root,db,profile,onRefresh){
   target.innerHTML='<div class="directory-tools"><label>Find an account<input id="directory-search" type="search" placeholder="Name, email or association"></label><label>Filter by role<select id="directory-role"><option value="">All roles</option>'+['admin','reviewer','association','judge','auditor','fan'].map(role=>`<option value="${role}">${role}</option>`).join('')+'</select></label></div><p id="directory-count" role="status"></p><div class="overflow-x-auto"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Association</th></tr></thead><tbody id="directory-rows"></tbody></table></div>';
   const search=document.getElementById('directory-search'),role=document.getElementById('directory-role');
   const render=()=>{const needle=search.value.trim().toLowerCase();const records=data.filter(p=>(!role.value||p.role===role.value)&&[p.display_name,p.email,p.association_id].some(v=>String(v||'').toLowerCase().includes(needle)));document.getElementById('directory-count').textContent=records.length+' of '+data.length+' accounts';document.getElementById('directory-rows').innerHTML=records.map(p=>`<tr><td>${esc(p.display_name||'Not recorded')}</td><td>${esc(p.email||'Not recorded')}</td><td>${esc(p.role)}</td><td>${esc(p.association_id?getAssociation(p.association_id).name:'MNCS')}</td></tr>`).join('')||'<tr><td colspan="4">No accounts match these filters.</td></tr>';};
-  search.addEventListener('input',render);role.addEventListener('change',render);render();
+  search.addEventListener('input',render);role.addEventListener('change',render);render();window.MNCS_ACCOUNT_DELETION?.mount(target,db,profile);
  });
 }
-window.MNCS_ACCOUNTS={mount,registerAssociation};
+window.MNCS_ACCOUNTS={mount,registerAssociation,call};
 })();
