@@ -27,6 +27,7 @@ async function refresh() {
  if(state.currentView==='awards')await window.renderAwards?.();
 }
 function renderPortal() {
+ window.MNCS_OPEN_PANEL=null;
  const identity=document.getElementById('account-identity');
  if(identity){identity.hidden=!user;identity.innerHTML=user?`<span><strong>${esc(profile?.display_name||'Signed in')}</strong> · ${esc(user.email||profile?.email||'')} <span class="role-pill">${esc(profile?.role||'Voting account')}</span>${profile?.association_id?' · '+esc(getAssociation(profile.association_id).name):''}</span><button id="identity-workspace">My workspace</button>`:'';document.getElementById('identity-workspace')?.addEventListener('click',()=>switchView('portal'));}
  if(user&&profile&&['judge','auditor','fan'].includes(profile.role)){
@@ -97,11 +98,16 @@ function setupWorkspaceNavigation(){
  const sections=[['overview','Home'],['submissions',profile.role==='association'?'Council requests & reports':'Council inbox'],['reporting','Reports'],...(cfg.workspaceMode==='national'?[['connections','Association sites'],['competitions','Competitions'],['exchange','Incoming drafts'],['performance','Performance']]:[['sports',profile.role==='association'?'Manage my sport':'Competitions & oversight'],['rankings','Rankings']]),...(profile.role==='admin'?[['associations','Associations'],['accounts','Create accounts'],['directory','Account directory']]:[]),...(db?[['security','Security']]:[])];
  const available=sections.filter(([id])=>document.getElementById('workspace-'+id));
  const nav=document.getElementById('workspace-nav');
- nav.innerHTML=available.filter(([id])=>!['associations','directory'].includes(id)).map(([id,label])=>`<button type="button" data-panel="${id}" aria-controls="workspace-${id}">${label}</button>`).join('');
+ nav.innerHTML=available.map(([id,label])=>`<button type="button" data-panel="${id}" aria-controls="workspace-${id}">${label}</button>`).join('');
  const activate=id=>{
   activePanel=available.some(([key])=>key===id)?id:'overview';
-  available.forEach(([key])=>{document.getElementById('workspace-'+key).hidden=key!==activePanel;});
+  available.forEach(([key])=>{const panel=document.getElementById('workspace-'+key);if(panel)panel.hidden=key!==activePanel;});
   nav.querySelectorAll('[data-panel]').forEach(button=>{const selected=button.dataset.panel===activePanel;button.classList.toggle('selected',selected);button.setAttribute('aria-current',selected?'page':'false');});
+  const label=available.find(([key])=>key===activePanel)?.[1]||'Home';
+  let path=document.getElementById('workspace-path');
+  if(!path&&nav.insertAdjacentHTML){nav.insertAdjacentHTML('afterend','<p id="workspace-path" class="workspace-path" role="status"></p>');path=document.getElementById('workspace-path');}
+  if(path)path.textContent='Workspace / '+label;
+  if(typeof location!=='undefined'&&state.currentView==='portal'&&location.hash!=='#portal/'+activePanel)location.hash='portal/'+activePanel;
  };
  nav.querySelectorAll('[data-panel]').forEach(button=>button.onclick=()=>activate(button.dataset.panel));
  root.querySelectorAll('[data-open-panel]').forEach(button=>button.onclick=()=>activate(button.dataset.openPanel));
@@ -109,7 +115,8 @@ function setupWorkspaceNavigation(){
  document.getElementById('workspace-awards-link')?.addEventListener('click',()=>switchView('awards'));
  window.MNCS_OPEN_PANEL=activate;
  if(profile.role==='admin'){document.getElementById('workspace-security')?.insertAdjacentHTML('beforeend','<div class="workspace-actions"><button type="button" id="settings-associations">Manage associations</button><button type="button" id="settings-directory">Account directory</button></div>');document.getElementById('settings-associations')?.addEventListener('click',()=>activate('associations'));document.getElementById('settings-directory')?.addEventListener('click',()=>activate('directory'));}
- activate(activePanel);
+ const route=typeof location!=='undefined'&&location.hash.startsWith('#portal/')?location.hash.slice(8):activePanel;
+ activate(route);
 }
 async function saveDraft(e) {
  e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;
