@@ -72,7 +72,7 @@ function switchView(view) {
   document.getElementById('mobile-menu-btn').setAttribute('aria-expanded','false');
   document.getElementById('search-toolbar').hidden=['portal','awards'].includes(view);
   document.querySelectorAll('.nav-btn').forEach(button=>button.setAttribute('aria-current',button.dataset.view===view?'page':'false'));
-  location.hash=view;
+  if(view!=='portal'||!location.hash.startsWith('#portal/'))location.hash=view;
   renderCurrentView();
 }
 
@@ -403,7 +403,7 @@ document.addEventListener('keydown',event=>{const modal=document.getElementById(
 document.getElementById('explore-directory').onclick=()=>switchView('associations');document.getElementById('open-workspace').onclick=()=>switchView('portal');
 ['assoc-status-filter','assoc-sport-filter','assoc-verification-filter','assoc-sort'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{associationPage=1;renderAssociations(state.searchQuery.toLowerCase().trim());}));
 document.getElementById('export-associations').onclick=()=>{const headers=['id','name','sport','shortName','status','verificationStatus','sourceUrl'];const decode=value=>{const node=document.createElement('textarea');node.innerHTML=String(value??'');return node.value;};const cell=value=>{let text=decode(value);if(/^[\s]*[=+@\-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};const content=[headers,...filteredAssociations().map(a=>headers.map(key=>a[key]))].map(row=>row.map(cell).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='MNCS-association-directory.csv';link.click();URL.revokeObjectURL(url);};
-window.addEventListener('hashchange',()=>{const next=location.hash.slice(1);if(['dashboard','associations','players','events','results','awards','portal'].includes(next)&&next!==state.currentView)switchView(next);});
+window.addEventListener('hashchange',()=>{const [next,panel]=location.hash.slice(1).split('/');if(['dashboard','associations','players','events','results','awards','portal'].includes(next)&&next!==state.currentView)switchView(next);if(next==='portal')window.MNCS_OPEN_PANEL?.(panel||'overview');});
 // Init
-const initialView=location.hash.slice(1);if(['dashboard','associations','players','events','results','awards','portal'].includes(initialView))switchView(initialView);
+const initialView=location.hash.slice(1).split('/')[0];if(['dashboard','associations','players','events','results','awards','portal'].includes(initialView))switchView(initialView);
 loadData();
