@@ -1450,7 +1450,7 @@ begin
  if managed.role='admin' then raise exception 'Administrator accounts are protected'; end if;
  for constraint_row in select c.conrelid::regclass relation,a.attname column_name from pg_constraint c
  join pg_attribute a on a.attrelid=c.conrelid and a.attnum=c.conkey[1]
- where c.contype='f' and c.confrelid in ('auth.users'::regclass,'public.profiles'::regclass) and c.conrelid<>'public.profiles'::regclass loop
+ where c.contype='f' and c.connamespace<>'auth'::regnamespace and c.confrelid in ('auth.users'::regclass,'public.profiles'::regclass) and c.conrelid<>'public.profiles'::regclass loop
   execute format('select count(*) from %s where %I=$1',constraint_row.relation,constraint_row.column_name) into n using target;
   if n>0 then blockers=blockers||jsonb_build_array(jsonb_build_object('records',constraint_row.relation::text,'count',n)); end if;
  end loop;
