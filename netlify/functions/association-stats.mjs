@@ -25,10 +25,12 @@ export async function collect(fetcher=fetch,env=process.env,now=Date.now()){
  if(!url||!key)throw Error('Automatic association statistics are not configured.');
  const headers={apikey:key,...(key.startsWith('sb_secret_')?{}:{Authorization:'Bearer '+key})};
  const read=async path=>{const r=await fetcher(url+'/rest/v1/'+path,{headers,signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error('Association connections could not be checked.');return r.json();};
- const [connectors,competitions]=await Promise.all([read('association_connectors?select=id,association_id,site_url,enabled&enabled=eq.true'),read('association_exchange?select=association_id,external_id,period,payload,published_payload,status&kind=eq.Competition&status=eq.Approved')]);
- const summaries=[],sources=[];
+ const [connectors,competitions]=await Promise.all([read('association_connectors?select=id,association_id,site_url,enabled'),read('association_exchange?select=association_id,external_id,period,payload,published_payload,status&kind=eq.Competition&status=eq.Approved')]);
+ const summaries=[],sources=[];let tessamAllowed=true;
  for(const connector of connectors){
   let origin;try{const u=new URL(connector.site_url);origin=u.origin;if(u.username||u.password)origin='';}catch{}
+  if(origin==='https://tessamims.netlify.app'){if(connector.enabled===false)tessamAllowed=false;continue;}
+  if(connector.enabled===false){sources.push({associationId:connector.association_id,status:'paused',message:'Association stats connection is paused.'});continue;}
   if(origin!==source){sources.push({associationId:connector.association_id,status:'unsupported',message:'This association needs a supported public stats feed.'});continue;}
   await Promise.all(['srdl','crdl','nrdl'].map(async region=>{
    const competition=competitions.find(c=>c.association_id===connector.association_id&&c.external_id==='comp-national-'+region+'-'+c.period);
@@ -41,6 +43,6 @@ export async function collect(fetcher=fetch,env=process.env,now=Date.now()){
    }catch{if(previous&&now-previous.checked<86400000)summaries.push({...previous.row,automatic:true,stale:true});sources.push({associationId:connector.association_id,region,status:'unavailable',message:'Source unavailable or invalid. Showing any last verified summary; do not treat it as current.'});}
   }));
  }
- const tertiary=await tessam(fetcher,now);return {summaries:[...summaries,...tertiary.summaries],sources:[...sources,...tertiary.sources],checkedAt:new Date(now).toISOString(),refreshSeconds:300};
+ const tertiary=tessamAllowed?await tessam(fetcher,now):{summaries:[],sources:[{associationId:'RESEARCH-28',status:'paused',message:'TESSAM stats connection is paused.'}]};return {summaries:[...summaries,...tertiary.summaries],sources:[...sources,...tertiary.sources],checkedAt:new Date(now).toISOString(),refreshSeconds:300};
 }
 export const handler=async event=>{const headers={'Content-Type':'application/json','Cache-Control':'no-store'};if(event.httpMethod!=='GET')return {statusCode:405,headers,body:JSON.stringify({error:'Use GET.'})};try{return {statusCode:200,headers,body:JSON.stringify(await collect())};}catch{return {statusCode:503,headers,body:JSON.stringify({error:'Automatic association stats are temporarily unavailable. Saved summaries remain available.'})};}};
