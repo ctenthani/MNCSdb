@@ -103,6 +103,7 @@ function setupWorkspaceNavigation(){
   activePanel=available.some(([key])=>key===id)?id:'overview';
   available.forEach(([key])=>{const panel=document.getElementById('workspace-'+key);if(panel)panel.hidden=key!==activePanel;});
   nav.querySelectorAll('[data-panel]').forEach(button=>{const selected=button.dataset.panel===activePanel;button.classList.toggle('selected',selected);button.setAttribute('aria-current',selected?'page':'false');});
+  if(activePanel==='performance')document.getElementById('workspace-performance')?.dispatchEvent?.(new Event('mncs-performance-open'));
   const label=available.find(([key])=>key===activePanel)?.[1]||'Home';
   let path=document.getElementById('workspace-path');
   if(!path&&nav.insertAdjacentHTML){nav.insertAdjacentHTML('afterend','<p id="workspace-path" class="workspace-path" role="status"></p>');path=document.getElementById('workspace-path');}
